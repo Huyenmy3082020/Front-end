@@ -45,7 +45,7 @@ function HomePage() {
                 <SliderComponent arrImg={[slider1, slider2, slider3]} />
 
                 <div
-                    style={{ marginTop: '60px', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}
+                    style={{ marginTop: '70px', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}
                 >
                     {products.map((product) => {
                         return (
