@@ -1,9 +1,8 @@
 import React from 'react';
-import ProductDetailComponent from '../../components/ProductDetailComponent/ProductDetailComponent';
+import ProductDetailComponent from '../../pages/ProductDetailPage/ProductDetailComponent/ProductDetailComponent';
 function ProductDetailPage() {
     return (
-        <div style={{ padding: '0 90px', background: '#efefef', height: '1000px' }}>
-            <h1> Trang chu</h1>
+        <div style={{ padding: '0 60px', background: '#efefef', height: '1000px' }}>
             <ProductDetailComponent style={{ display: 'flex', background: '#fff' }} />
         </div>
     );

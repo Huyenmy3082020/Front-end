@@ -53,3 +53,12 @@ export const deleteMany = async (id) => {
         throw error;
     }
 };
+export const getProductById = async (id) => {
+    try {
+        const res = await axios.get(`http://localhost:2000/product/getProductbyId/${id}`);
+        return res.data.data;
+    } catch (error) {
+        console.error('Error in deleteMany:', error);
+        throw error;
+    }
+};

@@ -5,3 +5,14 @@ export const getBase64 = (file) =>
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
     });
+export const convertPrice = (amount) => {
+    if (typeof amount !== 'number' || isNaN(amount)) {
+        return 'N/A'; // Trả về 'N/A' nếu giá trị không hợp lệ
+    }
+
+    // Chuyển số thành chuỗi và thêm dấu phân cách hàng nghìn
+    const formattedAmount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    // Thêm ký hiệu tiền tệ "₫"
+    return formattedAmount + ' ₫';
+};

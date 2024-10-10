@@ -3,10 +3,19 @@ import { WrapperReportText } from './style';
 import { StarFilled } from '@ant-design/icons';
 import now from '../../assets/images/now.png';
 import sale from '../../assets/images/sale.png';
+import { useNavigate } from 'react-router-dom';
 function CardComponent(props) {
-    const { countInStock, description, image, name, price, rating, type, discount, selled } = props;
+    const { countInStock, description, image, name, price, rating, type, discount, selled, id } = props;
+    const navigate = useNavigate();
+
+    const handleDetailProduct = (id) => {
+        navigate(`/product_detail/${id}`);
+    };
     return (
         <WrapperCardStyle
+            onClick={() => {
+                handleDetailProduct(id);
+            }}
             hoverable
             headStyle={{ width: '200px', height: '200px' }}
             style={{

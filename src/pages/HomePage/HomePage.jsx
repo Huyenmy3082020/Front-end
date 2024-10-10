@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom'; // Thêm import này
 import TypeProduct from '../../components/TypeProcduct/TypeProcduct';
 import { WrapperTypeProduct, WrapperBtnMore } from './style';
 import SliderComponent from '../../components/SliderComponent/SliderComponent';
@@ -6,18 +8,13 @@ import slider1 from '../../assets/images/slider1.png';
 import slider2 from '../../assets/images/slider2.png';
 import slider3 from '../../assets/images/slider3.png';
 import CardComponent from '../../components/CardComponent/CardComponent';
-import { useQuery } from '@tanstack/react-query';
 import * as Productservice from '../../service/Productservice';
-import { resolvePath } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 function HomePage() {
     const user = useSelector((state) => state.user);
-    localStorage.setItem('user', JSON.stringify(user));
-
-    const arr = ['may giat', 'a', 'sfs', 'sdsd'];
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate(); // Khởi tạo useNavigate
 
     useEffect(() => {
         const fetchProductAll = async () => {
@@ -33,38 +30,38 @@ function HomePage() {
 
         fetchProductAll();
     }, []);
+
+    const handleOnClick = (productId) => {
+        console.log(productId);
+    };
+
+    if (isLoading) {
+        return <div>Loading...</div>; // Hiển thị thông báo tải
+    }
+
     return (
         <div style={{ padding: '0 90px' }}>
-            <WrapperTypeProduct>
-                {arr.map((item) => (
-                    <TypeProduct name={item} key={item} />
-                ))}
-            </WrapperTypeProduct>
-
             <div id="container">
                 <SliderComponent arrImg={[slider1, slider2, slider3]} />
-
                 <div
                     style={{ marginTop: '70px', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}
                 >
-                    {products.map((product) => {
-                        return (
-                            <CardComponent
-                                key={product._id}
-                                countInStock={product.countInStock}
-                                description={product.description}
-                                image={product.image}
-                                name={product.name}
-                                price={product.price}
-                                rating={product.rating}
-                                type={product.type}
-                                discount={product.discount}
-                                selled={product.selled}
-                            />
-                        );
-                    })}
+                    {products.map((product) => (
+                        <CardComponent
+                            key={product._id}
+                            countInStock={product.countInStock}
+                            description={product.description}
+                            id={product._id}
+                            image={product.image}
+                            name={product.name}
+                            price={product.price}
+                            rating={product.rating}
+                            type={product.type}
+                            discount={product.discount}
+                            selled={product.selled}
+                        />
+                    ))}
                 </div>
-
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
                     <WrapperBtnMore
                         textButton="Xem thêm đi"
@@ -74,8 +71,8 @@ function HomePage() {
                             width: '240px',
                             height: '28px',
                             borderRadius: '4px',
-                        }} // Style object for ButtonComponent
-                        styleTextButton={{ color: '#1890ff', fontWeight: 500 }} // Style object for text inside ButtonComponent
+                        }}
+                        styleTextButton={{ color: '#1890ff', fontWeight: 500 }}
                     />
                 </div>
             </div>

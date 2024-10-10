@@ -7,6 +7,7 @@ import SignInPage from '../pages/SignInPage/SignInPage';
 import ProductDetailPage from '../pages/ProductDetailPage/ProductDetailPage';
 import ProfilePage from '../pages/Profile/ProfilePage';
 import AdminPage from '../components/AdminPageComponent/AdminPage';
+import Order from '../pages/OrderPage/OrderPage';
 import ProductTrash from '../components/ProductTrash/TrashComponent';
 const routes = [
     {
@@ -36,13 +37,18 @@ const routes = [
     },
 
     {
-        path: '/product_detail',
+        path: '/product_detail/:id',
         page: ProductDetailPage,
         isShowHeader: true,
     },
     {
         path: '/profile_page',
         page: ProfilePage,
+        isShowHeader: true,
+    },
+    {
+        path: '/order',
+        page: Order,
         isShowHeader: true,
     },
     {

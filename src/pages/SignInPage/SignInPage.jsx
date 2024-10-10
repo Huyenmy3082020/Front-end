@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import { updateUser } from '../../redux/slides/userSlide';
 
 function SignInPage() {
-    const [showPassword, setShowPassword] = useState(true);
+    const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -35,7 +35,6 @@ function SignInPage() {
     const handleGetDetailUser = async (id, token) => {
         try {
             const res = await Userservice.getDetailUser(id, token);
-            console.log('User details response:', res?.data);
             dispatch(
                 updateUser({
                     ...res?.data,
@@ -62,18 +61,14 @@ function SignInPage() {
                     if (data?.ACCESS_TOKEN_SECRET) {
                         try {
                             const decode = jwtDecode(data?.ACCESS_TOKEN_SECRET);
-                            console.log('Decoded token:', decode?.payload.id); // Debug thông tin giải mã token
-
                             handleGetDetailUser(decode?.payload.id, data?.ACCESS_TOKEN_SECRET);
                         } catch (decodeError) {
-                            console.error('Failed to decode token:', decodeError);
                             setErrorMessage('Failed to decode the token.');
                         }
                     }
                 },
                 onError: (error) => {
                     setIsLoading(false);
-                    console.error('Error response:', error);
                     if (error.response && error.response.data) {
                         setErrorMessage(error.response.data.message);
                     } else {
@@ -160,7 +155,9 @@ function SignInPage() {
 
                     {/* Hiển thị thông báo lỗi nếu có */}
                     {errorMessage && (
-                        <div style={{ color: 'red', textAlign: 'center', margin: '10px 0' }}>{errorMessage}</div>
+                        <div style={{ color: 'red', fontSize: '16px', textAlign: 'center', margin: '10px 0' }}>
+                            {errorMessage}
+                        </div>
                     )}
 
                     {/* Hiển thị spinner khi đang loading */}

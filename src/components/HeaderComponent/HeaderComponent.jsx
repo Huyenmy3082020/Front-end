@@ -22,12 +22,12 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 const { Search } = Input;
 
-function HeaderComponent(isHiddenSearch = false, isHiddenCart = false) {
+function HeaderComponent() {
     const user = useSelector((state) => state.user);
     const [userName, setUsername] = useState('');
+
     const [userAvatar, setUserAvatar] = useState('');
     const navigate = useNavigate();
-    console.log(userAvatar);
     useEffect(() => {
         setUsername(user?.name);
         setUserAvatar(user?.avatar);
@@ -79,7 +79,6 @@ function HeaderComponent(isHiddenSearch = false, isHiddenCart = false) {
         <div>
             <WrapperHeader>
                 <Col span={4}>
-                    <a href="/profile_page">alo</a>
                     <WrapperTextHeader>
                         <a>
                             <img
@@ -93,27 +92,23 @@ function HeaderComponent(isHiddenSearch = false, isHiddenCart = false) {
                     </WrapperTextHeader>
                 </Col>
                 <Col span={13}>
-                    {isHiddenSearch ? (
-                        <></>
-                    ) : (
-                        <div>
-                            <Search placeholder="input search text" allowClear enterButton="Search" size="large" />
-                            <WrapperList>
-                                <li>
-                                    <WrapperListItem>Điện gia dụng</WrapperListItem>
-                                </li>
-                                <li>
-                                    <WrapperListItem>Điện gia dụng</WrapperListItem>
-                                </li>
-                                <li>
-                                    <WrapperListItem>Điện gia dụng</WrapperListItem>
-                                </li>
-                                <li>
-                                    <WrapperListItem>Điện gia dụng</WrapperListItem>
-                                </li>
-                            </WrapperList>
-                        </div>
-                    )}
+                    <div>
+                        <Search placeholder="input search text" allowClear enterButton="Search" size="large" />
+                        <WrapperList>
+                            <li>
+                                <WrapperListItem>Điện gia dụng</WrapperListItem>
+                            </li>
+                            <li>
+                                <WrapperListItem>Điện gia dụng</WrapperListItem>
+                            </li>
+                            <li>
+                                <WrapperListItem>Điện gia dụng</WrapperListItem>
+                            </li>
+                            <li>
+                                <WrapperListItem>Điện gia dụng</WrapperListItem>
+                            </li>
+                        </WrapperList>
+                    </div>
                 </Col>
                 <Col span={7} style={{ display: 'flex', gap: '20px', marginBottom: '15px' }}>
                     <WrapperHeaderAccount>
@@ -132,65 +127,55 @@ function HeaderComponent(isHiddenSearch = false, isHiddenCart = false) {
                                     style={{ padding: '0 0px' }}
                                 >
                                     <div style={{ alignItems: 'center', display: 'flex' }}>
-                                        {userAvatar ? (
-                                            <WrapperListAccountIcon src={userAvatar}></WrapperListAccountIcon>
-                                        ) : (
-                                            <WrapperListAccountIcon src="https://salt.tikicdn.com/ts/upload/07/d5/94/d7b6a3bd7d57d37ef6e437aa0de4821b.png"></WrapperListAccountIcon>
-                                        )}
+                                        <WrapperListAccountIcon src="https://salt.tikicdn.com/ts/upload/07/d5/94/d7b6a3bd7d57d37ef6e437aa0de4821b.png"></WrapperListAccountIcon>
+
                                         <WrapperListAccountLink>Tài khoản</WrapperListAccountLink>
                                     </div>
                                 </StyledTippy>
                             </WrapperListAccount>
                             <div>
                                 <div style={{ marginLeft: '16px' }}>
-                                    {isHiddenCart ? (
-                                        <></>
-                                    ) : (
-                                        <Badge count={4} size="small">
-                                            <ShoppingCartOutlined
-                                                style={{ fontSize: '24px', color: '#1677ff', cursor: 'pointer' }}
-                                            />
-                                        </Badge>
-                                    )}
+                                    <Badge count={4} size="small">
+                                        <ShoppingCartOutlined
+                                            style={{ fontSize: '24px', color: '#1677ff', cursor: 'pointer' }}
+                                        />
+                                    </Badge>
 
                                     <span style={{ fontSize: '12px', color: '#fff' }}>Giỏ hàng </span>
                                 </div>
                             </div>
                         </div>
                         <div>
-                            {isHiddenCart ? (
-                                <></>
-                            ) : (
-                                <div style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
-                                    <img
-                                        src="https://salt.tikicdn.com/ts/upload/88/5c/9d/f5ee506836792eb7775e527ef8350a44.png"
-                                        style={{
-                                            width: '20px',
-                                            height: '20px',
-                                            marginRight: '4px',
-                                        }}
-                                    />
+                            <div style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                                <img
+                                    src="https://salt.tikicdn.com/ts/upload/88/5c/9d/f5ee506836792eb7775e527ef8350a44.png"
+                                    style={{
+                                        width: '20px',
+                                        height: '20px',
+                                        marginRight: '4px',
+                                    }}
+                                />
 
-                                    <span
-                                        style={{
-                                            margin: '0px',
-                                            display: 'block',
-                                            color: 'rgb(128, 128, 137)',
-                                            fontWeight: '400',
-                                            fontSize: '12px',
-                                            lineHeight: '150%',
-                                            paddingRight: '4px',
-                                        }}
-                                    >
-                                        Giao đến
-                                    </span>
-                                    <WrapperListAccountAdd>Bạn muốn giao hàng tới đâu</WrapperListAccountAdd>
-                                </div>
-                            )}
+                                <span
+                                    style={{
+                                        margin: '0px',
+                                        display: 'block',
+                                        color: 'rgb(128, 128, 137)',
+                                        fontWeight: '400',
+                                        fontSize: '12px',
+                                        lineHeight: '150%',
+                                        paddingRight: '4px',
+                                    }}
+                                >
+                                    Giao đến
+                                </span>
+                                <WrapperListAccountAdd>{user?.address}</WrapperListAccountAdd>
+                            </div>
                         </div>
                     </WrapperHeaderAccount>
                 </Col>
             </WrapperHeader>
+            <div></div>
         </div>
     );
 }
