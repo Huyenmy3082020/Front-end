@@ -17,12 +17,13 @@ import {
 } from './style';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 
-import { DeleteFilled } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 const { Search } = Input;
 
 function HeaderComponent() {
+    const order = useSelector((state) => state.order);
+    console.log(order);
     const user = useSelector((state) => state.user);
     const [userName, setUsername] = useState('');
 
@@ -135,7 +136,7 @@ function HeaderComponent() {
                             </WrapperListAccount>
                             <div>
                                 <div style={{ marginLeft: '16px' }}>
-                                    <Badge count={4} size="small">
+                                    <Badge count={order?.orderItems.length} size="small">
                                         <ShoppingCartOutlined
                                             style={{ fontSize: '24px', color: '#1677ff', cursor: 'pointer' }}
                                         />

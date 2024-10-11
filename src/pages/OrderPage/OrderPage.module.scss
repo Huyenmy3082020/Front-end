@@ -1,0 +1,65 @@
+.wrapper {
+    padding-top: 60px;
+    padding-left: 60px;
+    height: 100000px;
+    padding-right: 60px;
+    background-color: #f5f5fa;
+}
+.wrapperTitle {
+    background: rgb(255, 255, 255);
+    padding: 8px 16px;
+    border-radius: 4px;
+    color: rgb(36, 36, 36);
+    font-weight: 400;
+    font-size: 13px;
+    margin-bottom: 12px;
+    position: sticky;
+    display: flex;
+    top: 20px;
+    z-index: 99;
+    -webkit-box-align: center;
+    align-items: center;
+}
+.warpperIconItem {
+    width: 76px;
+    height: 20px;
+    opacity: 1;
+}
+.quantity {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 3px;
+    width: 84px;
+    justify-content: space-between;
+}
+.buttonquantity {
+    background-color: #fff;
+    border: none;
+}
+.inputQuantity {
+    border: none;
+    background: transparent;
+    width: 32px;
+    text-align: center;
+    font-size: 13px;
+    appearance: none;
+    margin: 0px;
+    outline: none;
+}
+.imgQuantityminus {
+    display: inline-block;
+    border-right: 1px solid rgb(200, 200, 200);
+    color: rgb(153, 153, 153);
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+}
+.imgQuantitySum {
+    display: inline-block;
+    border-left: 1px solid rgb(200, 200, 200);
+    color: rgb(153, 153, 153);
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+}

@@ -1,7 +1,7 @@
 import React, { startTransition, useEffect, useState } from 'react';
 import styles from '../../../pages/ProductDetailPage/ProductDetailComponent/ProductDetail.module.scss';
 import * as Productservice from '../../../service/Productservice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Col, InputNumber, Row } from 'antd';
 import tick from '../../../assets/tick.png';
 import chinhhang from '../../../assets/chinhhang.png';
@@ -20,13 +20,16 @@ import slider2 from '../../../assets/slider1.png.webp';
 import slider3 from '../../../assets/slider1.png.webp';
 import SliderComponentCustom from '../../../components/SliderProductDetail/SliderProductDetail';
 import { convertPrice } from '../../../ultil';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addOrder } from '../../../redux/slides/OrderSlide';
 
 function ProductDetailComponent() {
-    const onChange = (value) => {};
+    const [numProduct, setNumproduct] = useState(1);
+
     const user = useSelector((state) => state.user);
     const { id } = useParams();
     const [products, setProduct] = useState('');
+    const dispatch = useDispatch();
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -39,7 +42,24 @@ function ProductDetailComponent() {
 
         fetchProduct();
     }, [id]);
-    console.log(products.price);
+    const onchangeInput = (value) => {
+        setNumproduct(value);
+    };
+    const navigate = useNavigate(); // Khởi tạo navigate
+    const handleAddOrderProduc = () => {
+        const orderItem = {
+            name: products?.name,
+            amount: numProduct,
+            image: products?.image,
+            price: products?.price,
+            product: products._id,
+        };
+
+        dispatch(addOrder({ orderItem }));
+
+        navigate('/order', { state: { orderItem } });
+    };
+
     return (
         <div style={{ paddingTop: '40px', paddingRight: '30px', paddingLeft: '30px' }}>
             <div className={styles.wrapper}>
@@ -184,14 +204,16 @@ function ProductDetailComponent() {
                     <Col span={7}>
                         <div className={styles.wrapperList}>
                             <p>Số lượng</p>
-                            <InputNumber></InputNumber>
+                            <InputNumber min={1} value={numProduct} onChange={onchangeInput}></InputNumber>
                             <p className={styles.tamtinh}>Tạm tính</p>
                             <span style={{ fontSize: '24px', fontWeight: '500', marginBottom: '8px' }}>
                                 {convertPrice(products.price)}
                             </span>
                             <div style={{ paddingTop: '16px' }}>
                                 {' '}
-                                <button className={styles.muangay}>Mua ngay</button>
+                                <button className={styles.muangay} onClick={handleAddOrderProduc}>
+                                    Mua ngay
+                                </button>
                             </div>
                             <div style={{ paddingTop: '16px' }}>
                                 {' '}
