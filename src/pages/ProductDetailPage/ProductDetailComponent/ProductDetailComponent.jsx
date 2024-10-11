@@ -1,4 +1,4 @@
-import React, { startTransition, useEffect, useState } from 'react';
+import React, { startTransition, useEffect, useMemo, useState } from 'react';
 import styles from '../../../pages/ProductDetailPage/ProductDetailComponent/ProductDetail.module.scss';
 import * as Productservice from '../../../service/Productservice';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -14,6 +14,7 @@ import now from '../../../assets/now.png';
 import rose from '../../../assets/images/rose.jpg';
 import doitrahang from '../../../assets/doitrahang.png';
 import dongkiemhang from '../../../assets/dongkiemhang.png';
+
 import thanhtoan from '../../../assets/thanhtoan.png';
 import slider1 from '../../../assets/slider1.png.webp';
 import slider2 from '../../../assets/slider1.png.webp';
@@ -52,6 +53,7 @@ function ProductDetailComponent() {
             amount: numProduct,
             image: products?.image,
             price: products?.price,
+            discount: products?.discount,
             product: products._id,
         };
 

@@ -22,8 +22,6 @@ import { useSelector } from 'react-redux';
 const { Search } = Input;
 
 function HeaderComponent() {
-    const order = useSelector((state) => state.order);
-    console.log(order);
     const user = useSelector((state) => state.user);
     const [userName, setUsername] = useState('');
 
@@ -81,7 +79,7 @@ function HeaderComponent() {
             <WrapperHeader>
                 <Col span={4}>
                     <WrapperTextHeader>
-                        <a>
+                        <a href="/">
                             <img
                                 src="https://salt.tikicdn.com/ts/upload/0e/07/78/ee828743c9afa9792cf20d75995e134e.png"
                                 alt="Logo"

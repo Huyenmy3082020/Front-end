@@ -1,15 +1,36 @@
 // src/redux/store.js
-import { configureStore } from '@reduxjs/toolkit';
-import userReducer from '../redux/slides/userSlide'; // Đảm bảo đường dẫn đúng
-import OrderReducer from '../redux/slides/OrderSlide'; // Đảm bảo đường dẫn đúng
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import userReducer from './slides/userSlide'; // Đảm bảo đường dẫn đúng
+import orderReducer from './slides/OrderSlide'; // Đảm bảo đường dẫn đúng
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-// Lấy dữ liệu người dùng từ localStorage
-const persistedUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {};
+// Cấu hình persist
+const persistConfig = {
+    key: 'root',
+    version: 1,
+    storage,
+};
 
-// Tạo store với preloadedState từ localStorage
-export const store = configureStore({
-    reducer: {
-        user: userReducer,
-        order: OrderReducer,
-    },
+// Kết hợp các reducers
+const rootReducer = combineReducers({
+    user: userReducer,
+    order: orderReducer,
 });
+
+// Tạo persisted reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Tạo store
+export const store = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            },
+        }),
+});
+
+// Tạo persistor
+export const persistor = persistStore(store);
