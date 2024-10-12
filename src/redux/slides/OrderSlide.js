@@ -38,7 +38,7 @@ export const OrderSlide = createSlice({
 
         removeAllOrder: (state, action) => {
             const { listChecked } = action.payload;
-            // Lọc ra những sản phẩm không nằm trong listChecked
+            console.log(listChecked);
             state.orderItems = state.orderItems.filter((item) => !listChecked.includes(item.product));
         },
 

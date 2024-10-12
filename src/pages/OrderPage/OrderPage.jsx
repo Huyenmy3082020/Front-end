@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 function OrderPage() {
     const orderItems = useSelector((state) => state.order.orderItems);
+
     const [listCheck, setlistChecked] = useState([]);
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
@@ -22,9 +23,9 @@ function OrderPage() {
         const value = e.target.value;
         if (listCheck.includes(value)) {
             const newListChecked = listCheck.filter((item) => item !== value);
-            setlistChecked(newListChecked); // Xóa sản phẩm khỏi danh sách
+            setlistChecked(newListChecked);
         } else {
-            setlistChecked([...listCheck, value]); // Thêm sản phẩm vào danh sách
+            setlistChecked([...listCheck, value]);
         }
     };
     const listChecked = listCheck.length === orderItems.length;
@@ -81,31 +82,21 @@ function OrderPage() {
         return result;
     }, [orderItems, listCheck]);
 
-    const diliveryMemo = useMemo(() => {
-        if (priceMemo > 500000) {
-            return 0;
-        } else if (priceMemo > 250) {
-            return 10000;
-        } else {
-            return 0;
-        }
-    }, [priceMemo]);
-
     const totalPriceMemo = useMemo(() => {
-        return Number(priceMemo) - Number(priceDisCountMemo) + Number(diliveryMemo);
-    }, [priceMemo, priceDisCountMemo, diliveryMemo]);
+        return Number(priceMemo) - Number(priceDisCountMemo);
+    }, [priceMemo, priceDisCountMemo]);
 
     const navigate = useNavigate();
     const handleOrder = () => {
         if (selectedOrderItems.length === 0) {
             message.error('Vui lòng chọn ít nhất một sản phẩm để thanh toán.');
-            return; // Ngăn không cho tiếp tục
+            return;
         }
+
         navigate('/payment', {
             state: {
                 orderItems: selectedOrderItems,
                 itemPrices: priceMemo,
-                diliveryMemo: diliveryMemo,
                 totalPrice: totalPriceMemo,
                 priceDisCountMemo: priceDisCountMemo,
             },
@@ -262,10 +253,6 @@ function OrderPage() {
                             <div className={styles.wrapperRightList}>
                                 <p style={{ color: 'rgb(128, 128, 137)', fontWeight: '500' }}>Giảm giá từ Deal</p>
                                 <span style={{ color: 'green' }}>-{convertPrice(priceDisCountMemo)}</span>
-                            </div>
-                            <div className={styles.wrapperRightList}>
-                                <p style={{ color: 'rgb(128, 128, 137)', fontWeight: '500' }}>Phí giao hàng</p>
-                                <span style={{ color: 'green' }}>{convertPrice(diliveryMemo)}</span>
                             </div>
                             <div className={styles.wrapperRightList}>
                                 <span style={{ color: ' rgb(39, 39, 42)' }}>Tổng tiền</span>

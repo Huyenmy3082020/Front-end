@@ -3,12 +3,18 @@ import styles from '../../pages/OrderSuscces/OrderSusscess.module.scss';
 import { convertPrice } from '../../ultil';
 function OrderSusscess() {
     const location = useLocation();
-    console.log();
+
     return (
         <div className={styles.wrapper}>
             <div className={styles.wrapperRight}>
                 <div className={styles.wrapperHeader}>
-                    <p className={styles.textOrdersuscess}>Yay, đặt hàng thành công!</p>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <p className={styles.textOrdersuscess}>Yay, đặt hàng thành công!</p>
+
+                        <p className={styles.textOrdersuscess}>
+                            Chuẩn bị tiền mặt {convertPrice(location.state.totalprice)}
+                        </p>
+                    </div>
                     <img
                         style={{ position: 'absolute', width: '100%', height: ' 100%' }}
                         src="https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/confetti.svg"

@@ -11,6 +11,7 @@ import Order from '../pages/OrderPage/OrderPage';
 import ProductTrash from '../components/ProductTrash/TrashComponent';
 import OrderSusscess from '../pages/OrderSuscces/OrderSusscess';
 import Payment from '../pages/Payment/Payment';
+import Myorder from '../pages/Myorder/Myorder';
 const routes = [
     {
         path: '/',
@@ -51,6 +52,11 @@ const routes = [
     {
         path: '/order',
         page: Order,
+        isShowHeader: true,
+    },
+    {
+        path: '/myorder',
+        page: Myorder,
         isShowHeader: true,
     },
     {

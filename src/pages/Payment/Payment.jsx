@@ -1,9 +1,7 @@
-import React, { useMemo, useState } from 'react';
-import styles from '../../pages/OrderPage/OrderPage.module.scss';
-import { Col, Row, Steps, Checkbox, Radio, message } from 'antd';
-import topdeal from '../../assets/topdeal.png';
-import chinhhang from '../../assets/chinhhang.png';
-import doitrahang from '../../assets/doitra.png';
+import React, { useEffect, useState } from 'react';
+import styles from '../../pages/Payment/Payment.module.scss';
+import { Col, Row, Radio, message } from 'antd';
+import { removeAllOrder } from '../../redux/slides/OrderSlide';
 import now from '../../assets/now.png';
 import thanhtoanbangtienmat from '../../assets/thanhtoanbangtienmat.png';
 import thetindung from '../../assets/thetindung.png';
@@ -12,15 +10,38 @@ import vnpay from '../../assets/vnpay.png';
 import zalopay from '../../assets/zalopay.png';
 import carfreeship from '../../../src/assets/carfreeshsip.jpg';
 import { useDispatch, useSelector } from 'react-redux';
-import { decreaseOrder, increaseOrder, removeOrder, removeAllOrder } from '../../redux/slides/OrderSlide';
 import { convertPrice, PaymentMethod } from '../../ultil';
 import * as Orderservice from '../../service/OrderService';
 import { useMutationHooks } from '../../hooks/useMutationHook';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Laixe } from '../../components/IconComponent/IconComponent';
 function Payment() {
     const user = useSelector((state) => state.user);
-    const orderItems = useSelector((state) => state.order.orderItems);
     const location = useLocation();
+    const [selectedShipping, setSelectedShipping] = useState('giaosieutoc');
+    const [idProduct, setIdProduct] = useState([]);
+
+    const products = location.state.orderItems;
+
+    useEffect(() => {
+        const ids = products.map((product) => product.product);
+        setIdProduct(ids);
+    }, [products]);
+
+    const [shippingFee, setShippingFee] = useState(-25000); // Phí giao siêu tốc mặc định
+
+    const handleShippingChange = (e) => {
+        const { value } = e.target;
+        setSelectedShipping(value);
+
+        if (value === 'giaosieutoc') {
+            setShippingFee(-25000);
+        } else if (value === 'giaotietkiem') {
+            setShippingFee(-16000);
+        }
+    };
+
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
@@ -32,154 +53,206 @@ function Payment() {
     const { payment } = PaymentMethod();
     const selectedPaymentDescription = payment[selectedPaymentMethod];
 
-    const mutationAddOrder = useMutationHooks((data) => Orderservice.createOrder(data), {
-        onSuccess: () => {
-            message.success('Đặt hàng thành công!');
-        },
-    });
+    const mutationAddOrder = useMutationHooks((data) => Orderservice.createOrder(data));
 
+    const totalPrice = location.state.totalPrice + shippingFee;
     const handleAddOrder = () => {
-        mutationAddOrder.mutate({
-            orderItem: location.state.orderItems,
-            payment: selectedPaymentDescription,
-            itemPrices: location.state.itemPrices,
-            shippingAddress: {
+        mutationAddOrder.mutate(
+            {
+                orderItems: location.state.orderItems,
+                payment: selectedPaymentDescription,
+                itemPrices: location.state.itemPrices,
                 city: user?.city,
                 phone: user?.phone,
                 name: user?.name,
-                shippingPrice: location.state.diliveryMemo,
+                shippingPrice: shippingFee,
                 address: user?.address,
+                totalPrice: totalPrice,
+                user: user?.id,
             },
-            totalPrice: location.state.totalPrice,
-            user: user?.id,
-        });
-        navigate('ordersuscess', {
-            state: {
-                payment: selectedPaymentDescription,
-                totalprice: location.state.totalPrice,
+            {
+                onSuccess: () => {
+                    if (mutationAddOrder.data.status === 'err') {
+                        message.error('Sản phẩm trong kho đã hết ! Vui lòng quay lại sau');
+                    } else {
+                        dispatch(removeAllOrder({ listChecked: idProduct }));
+                        message.success('Đặt hàng thành công');
+                    }
+                },
+                onError: (error) => {
+                    if (error?.response?.data?.status === 'err') {
+                        message.error(error.response.data.message || 'Có lỗi xảy ra, vui lòng thử lại.');
+                    } else if (error?.message) {
+                        message.error(error.message);
+                    } else {
+                        message.error('Có lỗi xảy ra, vui lòng thử lại.');
+                    }
+                },
             },
-        });
+        );
     };
+
+    const paymentMethods = [
+        { value: 'tienmat', label: 'Thanh toán bằng tiền mặt', icon: thanhtoanbangtienmat },
+        { value: 'thetindung', label: 'Thanh toán bằng thẻ tín dụng', icon: thetindung },
+        { value: 'viettelmoney', label: 'Thanh toán bằng ViettelMoney', icon: viettelmoney },
+        { value: 'zalopay', label: 'Thanh toán bằng ZaloPay', icon: zalopay },
+        { value: 'vnpay', label: 'Thanh toán bằng VnPay', icon: vnpay },
+    ];
+    const ShipMethods = [
+        { value: 'giaosieutoc', label: 'Giao siêu tốc 2h', icon: now, discount: '-25k' },
+        { value: 'giaotietkiem', label: 'Giao tiết kiệm', icon: null, discount: '-16k' },
+    ];
 
     return (
         <div className={styles.wrapper}>
-            <h2>Giỏ hàng</h2>
             <Row>
                 <Col span={17}>
-                    <div>
-                        <p>Chọn hình thức giao hàng</p>
-                        <div className={styles.hinhthucgiao}>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Radio>
-                                    <img src={now} alt="" width="32px" height="16px" />
-                                    <span style={{ marginLeft: '8px' }}>Giao siêu tốc 2h</span>
-                                    <div className={styles.priceShip}>
-                                        <span>-25k</span>
-                                    </div>
-                                </Radio>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Radio>
-                                    <span style={{ marginLeft: '8px' }}>Giao tiết kiệm</span>
-                                    <div className={styles.priceShip}>
-                                        <span>-16k</span>
-                                    </div>
-                                </Radio>
-                            </div>
-                        </div>
-                    </div>
-
-                    {orderItems.map((orderItem) => (
-                        <div className={styles.wrapperTitle} key={orderItem.product}>
-                            <div style={{ flex: '3', display: 'flex', alignItems: 'center' }}>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div style={{ marginLeft: '6px' }}>
-                                        <img width="80px" height="80px" src={orderItem.image} alt="" />
-                                    </div>
-                                    <div style={{ padding: '8px', marginLeft: '8px' }}>
-                                        <div>
-                                            <div>
-                                                <p
+                    <div style={{ backgroundColor: '#fff' }}>
+                        <div style={{ backgroundColor: '#fff', paddingTop: '8px' }}>
+                            <h2 style={{ marginLeft: '16px', marginBottom: '16px' }}>Giỏ hàng</h2>
+                            {location.state.orderItems.map((orderItem) => (
+                                <div>
+                                    <div className={styles.PaymentWrapper} key={orderItem.product}>
+                                        <div className={styles.test}>
+                                            <img
+                                                src="https://salt.tikicdn.com/ts/upload/ad/b7/93/7094a85d0b6d299f30ed89b03511deb9.png"
+                                                width="24px"
+                                                height="24px"
+                                                alt=""
+                                            />
+                                            Gói: Giao siêu tốc 2h, trước 10h ngày mai
+                                        </div>
+                                        <div className={styles.PaymentWrapperLeft}>
+                                            <div className={styles.wrapperItem}>
+                                                <div
                                                     style={{
-                                                        marginTop: '8px',
-                                                        color: 'rgb(39, 39, 42)',
-                                                        fontSize: '1.4rem',
-                                                        fontWeight: '450',
-                                                        maxWidth: '240px',
-                                                        overflow: 'hidden',
-                                                        textOverflow: 'ellipsis',
-                                                        whiteSpace: 'normal',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
                                                     }}
                                                 >
-                                                    {orderItem.name}
-                                                </p>
+                                                    <img src={now} alt="" width="32px" height="16px" />
+                                                    <span style={{ marginLeft: '8px' }}>Giao siêu tốc 2h</span>
+                                                </div>
+                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <span
+                                                        style={{
+                                                            textDecoration: 'line-through',
+                                                            color: 'rgb(128, 128, 137)',
+                                                            fontWeight: '500',
+                                                        }}
+                                                    >
+                                                        {convertPrice(25000)}
+                                                    </span>
+                                                    <span
+                                                        style={{
+                                                            marginLeft: '8px',
+                                                            color: 'rgb(0, 171, 86) ',
+                                                            fontWeight: '500',
+                                                        }}
+                                                    >
+                                                        MIỄN PHÍ
+                                                    </span>
+                                                </div>
                                             </div>
+                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div>
+                                                    <img src={orderItem.image} width="48px" height="48px" alt="" />
+                                                </div>
+                                                <div
+                                                    style={{
+                                                        marginLeft: '8px',
+                                                        color: 'rgb(128, 128, 137)',
+                                                        fontWeight: '450',
+                                                        fontSize: '1.5rem',
+                                                    }}
+                                                >
+                                                    <span>{orderItem.name}</span>
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between',
+                                                            marginTop: '10px',
+                                                        }}
+                                                    >
+                                                        <div>SL:X{orderItem.amount}</div>
+                                                        <span
+                                                            style={{
+                                                                color: 'red',
+                                                                fontWeight: '500',
+                                                                fontSize: '1.5rem',
+                                                            }}
+                                                        >
+                                                            <span
+                                                                style={{
+                                                                    color: ' rgb(128, 128, 137)',
+                                                                    textDecoration: ' line-through',
+                                                                    marginRight: '8px',
+                                                                }}
+                                                            >
+                                                                {convertPrice(orderItem.price * 1.3)}
+                                                            </span>
+                                                            {convertPrice(orderItem.price)}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className={styles.PaymentWrapperRight}>
+                                            <span>
+                                                <Laixe></Laixe>
+                                                Được giao bởi TikiNOW Smart Logistics (giao từ Hà Nội)
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
+                            ))}
+
+                            <p style={{ marginLeft: '16px', fontSize: '1.6rem', marginTop: '16px' }}>
+                                Chọn hình thức thanh toán
+                            </p>
+
+                            <div className={styles.hinhthucthanhtoan}>
+                                {paymentMethods.map((method) => (
+                                    <div
+                                        key={method.value}
+                                        style={{ display: 'flex', alignItems: 'center', paddingBottom: '8px' }}
+                                    >
+                                        <Radio
+                                            onClick={handleChange}
+                                            value={method.value}
+                                            checked={selectedPaymentMethod === method.value}
+                                        >
+                                            <img width="32px" height="32px" src={method.icon} alt={method.label} />
+                                            <span style={{ marginLeft: '8px' }}>{method.label}</span>
+                                        </Radio>
+                                    </div>
+                                ))}
                             </div>
-                            <div style={{ flex: '1', color: 'red', fontWeight: '500' }}></div>
-                            <div style={{ flex: '1', color: 'rgb(120, 120, 120)' }}></div>
-                            <div style={{ flex: '1', color: 'red', fontWeight: '500' }}></div>
                         </div>
-                    ))}
-                    <div>
-                        <p>Chọn hình thức thanh toán</p>
-
-                        <div className={styles.hinhthucthanhtoan}>
-                            <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '8px' }}>
-                                <Radio
-                                    onClick={handleChange}
-                                    value="tienmat"
-                                    checked={selectedPaymentMethod === 'tienmat'}
-                                >
-                                    <img width="32px" height="32px" src={thanhtoanbangtienmat} alt="" />
-                                    <span style={{ marginLeft: '8px' }}>Thanh toán bằng tiền mặt</span>
-                                </Radio>
-                            </div>
-
-                            {/* Radio cho Thẻ tín dụng */}
-                            <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '8px' }}>
-                                <Radio
-                                    onClick={handleChange}
-                                    value="thetindung"
-                                    checked={selectedPaymentMethod === 'thetindung'}
-                                >
-                                    <img width="32px" height="32px" src={thetindung} alt="" />
-                                    <span style={{ marginLeft: '8px' }}>Thanh toán bằng thẻ tín dụng</span>
-                                </Radio>
-                            </div>
-
-                            {/* Radio cho ViettelMoney */}
-                            <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '8px' }}>
-                                <Radio
-                                    onClick={handleChange}
-                                    value="viettelmoney"
-                                    checked={selectedPaymentMethod === 'viettelmoney'}
-                                >
-                                    <img width="32px" height="32px" src={viettelmoney} alt="" />
-                                    <span style={{ marginLeft: '8px' }}>Thanh toán bằng ViettelMoney</span>
-                                </Radio>
-                            </div>
-
-                            {/* Radio cho ZaloPay */}
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Radio
-                                    onClick={handleChange}
-                                    value="zalopay"
-                                    checked={selectedPaymentMethod === 'zalopay'}
-                                >
-                                    <img width="32px" height="32px" src={zalopay} alt="" />
-                                    <span style={{ marginLeft: '8px' }}>Thanh toán bằng ZaloPay</span>
-                                </Radio>
-                            </div>
-
-                            {/* Radio cho VnPay */}
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Radio onClick={handleChange} value="vnpay" checked={selectedPaymentMethod === 'vnpay'}>
-                                    <img width="32px" height="32px" src={vnpay} alt="" />
-                                    <span style={{ marginLeft: '8px' }}>Thanh toán bằng VnPay</span>
-                                </Radio>
+                        <div>
+                            <p style={{ marginLeft: '16px', fontSize: '1.6rem' }}>Chọn hình thức giao hàng</p>
+                            <div className={styles.hinhthucthanhtoan}>
+                                {ShipMethods.map((method) => (
+                                    <div
+                                        key={method.value}
+                                        style={{ display: 'flex', alignItems: 'center', paddingBottom: '8px' }}
+                                    >
+                                        <Radio
+                                            checked={selectedShipping === method.value}
+                                            value={method.value}
+                                            onChange={handleShippingChange}
+                                        >
+                                            {method.icon && (
+                                                <img src={method.icon} alt={method.label} width="32px" height="16px" />
+                                            )}
+                                            <span style={{ marginLeft: '8px' }}>{method.label}</span>
+                                            <div className={styles.priceShip}>
+                                                <span>{method.discount}</span>
+                                            </div>
+                                        </Radio>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -207,7 +280,9 @@ function Payment() {
                     <div style={{ marginTop: '16px' }}>
                         <div className={styles.wrapperRight}>
                             <div className={styles.wrapperRightList}>
-                                <span style={{ color: 'rgb(128, 128, 137)' }}>Tiki khuyến mãi</span>
+                                <span style={{ color: 'rgb(128, 128, 137)', paddingBottom: '16px' }}>
+                                    Tiki khuyến mãi
+                                </span>
                                 <a>Có thể chọn</a>
                             </div>
                             <div>
@@ -219,8 +294,11 @@ function Payment() {
                                         src={carfreeship}
                                         alt=""
                                     />
+                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <span style={{ marginRight: '8px' }}>Giảm 50%</span>
+                                        <button className={styles.bochon}>Bỏ chọn</button>
+                                    </div>
                                 </div>
-                                <div></div>
                             </div>
                         </div>
                     </div>
@@ -232,16 +310,18 @@ function Payment() {
                             </div>
                             <div className={styles.wrapperRightList}>
                                 <p style={{ color: 'rgb(128, 128, 137)', fontWeight: '500' }}>Giảm giá từ Deal</p>
-                                <span style={{ color: 'green' }}>{convertPrice(location.state.priceDisCountMemo)}</span>
+                                <span style={{ color: 'green' }}>
+                                    -{convertPrice(location.state.priceDisCountMemo)}
+                                </span>
                             </div>
                             <div className={styles.wrapperRightList}>
                                 <p style={{ color: 'rgb(128, 128, 137)', fontWeight: '500' }}>Phí giao hàng</p>
-                                <span style={{ color: 'green' }}>-{convertPrice(location.state.diliveryMemo)}</span>
+                                <span style={{ color: 'green' }}>{convertPrice(shippingFee)}</span>
                             </div>
                             <div className={styles.wrapperRightList}>
                                 <span style={{ color: ' rgb(39, 39, 42)' }}>Tổng tiền</span>
                                 <span style={{ color: 'red' }} className={styles.price}>
-                                    {convertPrice(location.state.totalPrice)}
+                                    {convertPrice(totalPrice)}
                                 </span>
                             </div>
                             <span
@@ -253,7 +333,7 @@ function Payment() {
                                     justifyContent: 'flex-end',
                                 }}
                             >
-                                Tiet kiem
+                                Tiết kiệm
                             </span>
                             <span
                                 style={{
@@ -268,7 +348,7 @@ function Payment() {
                             </span>
                             <div style={{ paddingTop: '10px' }}>
                                 <button className={styles.muangay} onClick={handleAddOrder}>
-                                    Mua ngay
+                                    Đặt ngay
                                 </button>
                             </div>
                         </div>
