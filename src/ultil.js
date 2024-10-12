@@ -16,3 +16,14 @@ export const convertPrice = (amount) => {
     // Thêm ký hiệu tiền tệ "₫"
     return formattedAmount + ' ₫';
 };
+export const PaymentMethod = () => {
+    return {
+        payment: {
+            tienmat: 'Thanh toán bằng tiền mặt',
+            vnpay: 'Thanh toán bằng VNPay',
+            zalopay: 'Thanh toán bằng ZaloPay',
+            thetindung: 'Thanh toán bằng thẻ tín dụng',
+            viettelmoney: 'Thanh toán bằng ViettelMoney',
+        },
+    };
+};

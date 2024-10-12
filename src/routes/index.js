@@ -9,6 +9,8 @@ import ProfilePage from '../pages/Profile/ProfilePage';
 import AdminPage from '../components/AdminPageComponent/AdminPage';
 import Order from '../pages/OrderPage/OrderPage';
 import ProductTrash from '../components/ProductTrash/TrashComponent';
+import OrderSusscess from '../pages/OrderSuscces/OrderSusscess';
+import Payment from '../pages/Payment/Payment';
 const routes = [
     {
         path: '/',
@@ -49,6 +51,16 @@ const routes = [
     {
         path: '/order',
         page: Order,
+        isShowHeader: true,
+    },
+    {
+        path: '/payment',
+        page: Payment,
+        isShowHeader: true,
+    },
+    {
+        path: 'payment/ordersuscess',
+        page: OrderSusscess,
         isShowHeader: true,
     },
     {

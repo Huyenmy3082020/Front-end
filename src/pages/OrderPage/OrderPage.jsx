@@ -9,6 +9,8 @@ import carfreeship from '../../../src/assets/carfreeshsip.jpg';
 import { useDispatch, useSelector } from 'react-redux';
 import { decreaseOrder, increaseOrder, removeOrder, removeAllOrder } from '../../redux/slides/OrderSlide';
 import { convertPrice } from '../../ultil';
+import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 function OrderPage() {
     const orderItems = useSelector((state) => state.order.orderItems);
@@ -38,7 +40,6 @@ function OrderPage() {
             setlistChecked([]);
         }
     };
-    console.log(listCheck);
     const handleOnclickDecrease = (idProduct) => {
         dispatch(decreaseOrder({ idProduct }));
     };
@@ -69,6 +70,8 @@ function OrderPage() {
         return result;
     }, [orderItems, listCheck]);
 
+    const selectedOrderItems = orderItems.filter((order) => listCheck.includes(order.product));
+
     const priceMemo = useMemo(() => {
         const result = orderItems
             .filter((item) => listCheck.includes(item.product)) // Chỉ tính cho những sản phẩm đã được chọn
@@ -92,20 +95,28 @@ function OrderPage() {
         return Number(priceMemo) - Number(priceDisCountMemo) + Number(diliveryMemo);
     }, [priceMemo, priceDisCountMemo, diliveryMemo]);
 
-    const description = 'This is a description.';
+    const navigate = useNavigate();
+    const handleOrder = () => {
+        if (selectedOrderItems.length === 0) {
+            message.error('Vui lòng chọn ít nhất một sản phẩm để thanh toán.');
+            return; // Ngăn không cho tiếp tục
+        }
+        navigate('/payment', {
+            state: {
+                orderItems: selectedOrderItems,
+                itemPrices: priceMemo,
+                diliveryMemo: diliveryMemo,
+                totalPrice: totalPriceMemo,
+                priceDisCountMemo: priceDisCountMemo,
+            },
+        });
+    };
+
     return (
         <div className={styles.wrapper}>
             <h2>Giỏ hàng</h2>
             <Row>
                 <Col span={17}>
-                    <Steps
-                        current={2}
-                        items={[
-                            { title: 'Finished', description },
-                            { title: 'In Progress', description, subTitle: 'Left 00:00:08' },
-                            { title: 'Waiting', description },
-                        ]}
-                    />
                     <div className={styles.wrapperTitle}>
                         <div style={{ flex: '3', display: 'flex', alignItems: 'center' }}>
                             <Checkbox onChange={onChangeAll} checked={listChecked}></Checkbox>
@@ -176,12 +187,7 @@ function OrderPage() {
                                             style={{ cursor: 'pointer' }}
                                         />
                                     </span>
-                                    <input
-                                        type="text"
-                                        className={styles.inputQuantity}
-                                        value={orderItem.amount}
-                                        readOnly
-                                    />
+                                    <input type="text" className={styles.inputQuantity} value={orderItem.amount} />
                                     <span
                                         className={styles.imgQuantitySum}
                                         onClick={() => handleOnclickIncrease(orderItem.product)}
@@ -290,7 +296,9 @@ function OrderPage() {
                                 Đã bao gồm thuế VAT (nếu có)
                             </span>
                             <div style={{ paddingTop: '10px' }}>
-                                <button className={styles.muangay}>Mua ngay</button>
+                                <button className={styles.muangay} onClick={handleOrder}>
+                                    Mua ngay
+                                </button>
                             </div>
                         </div>
                     </div>

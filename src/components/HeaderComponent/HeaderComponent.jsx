@@ -24,7 +24,7 @@ const { Search } = Input;
 function HeaderComponent() {
     const user = useSelector((state) => state.user);
     const [userName, setUsername] = useState('');
-
+    const order = useSelector((state) => state.order.orderItems);
     const [userAvatar, setUserAvatar] = useState('');
     const navigate = useNavigate();
     useEffect(() => {
@@ -134,7 +134,7 @@ function HeaderComponent() {
                             </WrapperListAccount>
                             <div>
                                 <div style={{ marginLeft: '16px' }}>
-                                    <Badge count={order?.orderItems.length} size="small">
+                                    <Badge count={6} size="small">
                                         <ShoppingCartOutlined
                                             style={{ fontSize: '24px', color: '#1677ff', cursor: 'pointer' }}
                                         />

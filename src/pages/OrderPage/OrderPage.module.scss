@@ -13,10 +13,8 @@
     font-weight: 400;
     font-size: 13px;
     margin-bottom: 12px;
-    position: sticky;
     display: flex;
     top: 20px;
-    z-index: 99;
     -webkit-box-align: center;
     align-items: center;
 }
@@ -126,4 +124,36 @@
     height: 40px;
     font-size: 16px;
     line-height: 150%;
+}
+.hinhthucgiao {
+    background: rgb(240, 248, 255);
+    border: 1px solid rgb(194, 225, 255);
+    border-radius: 10px;
+    padding: 16px;
+    display: grid;
+    row-gap: 12px;
+    width: 50%;
+    margin-bottom: 16px;
+}
+.hinhthucthanhtoan {
+    background: #fff;
+    border: 1px solid rgb(194, 225, 255);
+    border-radius: 10px;
+    padding: 16px;
+    display: grid;
+    row-gap: 12px;
+    margin-bottom: 16px;
+}
+.priceShip {
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 500;
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    color: rgb(0, 171, 86);
+    padding: 0px 4px;
+    background-color: rgb(255, 255, 255);
+    margin-left: 4px;
+    border-radius: 4px;
 }
