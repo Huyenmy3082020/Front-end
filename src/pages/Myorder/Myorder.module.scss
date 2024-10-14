@@ -1,0 +1,23 @@
+.wrapperList {
+    list-style: none;
+    margin: 0 0;
+}
+.wrapperItem {
+    display: flex;
+    padding: 7px 18px;
+    align-items: center;
+    color: rgb(74, 74, 74);
+    margin-right: 24px;
+}
+.wrapperItem:hover {
+    opacity: 0.95;
+    background-color: rgb(235, 235, 240);
+    color: rgb(0, 0, 0);
+}
+.imgMyorderNav {
+    width: 24px;
+    height: 24px;
+    margin: 0px 22px 0px 0px;
+    font-size: 24px;
+    color: rgb(155, 155, 155);
+}

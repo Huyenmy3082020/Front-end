@@ -14,6 +14,7 @@ const TableComponent = ({ data }) => {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            sorter: (a, b) => a.name.length - b.name.length,
         },
         {
             title: 'Type',

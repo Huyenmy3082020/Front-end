@@ -75,3 +75,143 @@ export const Laixe = () => {
         </svg>
     );
 };
+
+// user
+const svgStyle = {
+    width: '24px',
+    height: '24px',
+    margin: '0px 22px 0px 0px',
+    fontSize: '24px',
+    color: 'rgb(155, 155, 155)',
+};
+
+export const User = ({ size = 24, color = 'rgb(155, 155, 155)' }) => {
+    return (
+        <svg
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            viewBox="0 0 24 24"
+            style={{
+                ...svgStyle,
+                width: `${size}px`,
+                height: `${size}px`,
+                color: color,
+            }}
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+        </svg>
+    );
+};
+
+export const Bell = () => {
+    return (
+        <svg
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            viewBox="0 0 24 24"
+            style={svgStyle}
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"></path>
+        </svg>
+    );
+};
+
+export const QuanLiDonHang = () => {
+    return (
+        <svg
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            viewBox="0 0 24 24"
+            style={svgStyle}
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path d="M13 12h7v1.5h-7zm0-2.5h7V11h-7zm0 5h7V16h-7zM21 4H3c-1.1 0-2 .9-2 2v13c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 15h-9V6h9v13z"></path>
+        </svg>
+    );
+};
+
+export const SoDiaChi = () => {
+    return (
+        <svg
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            viewBox="0 0 24 24"
+            style={svgStyle}
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
+        </svg>
+    );
+};
+
+export const ThongTinThanhToan = () => {
+    return (
+        <svg
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            viewBox="0 0 24 24"
+            style={svgStyle}
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"></path>
+        </svg>
+    );
+};
+
+export const SanPhamDaXem = () => {
+    return (
+        <svg
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            viewBox="0 0 24 24"
+            style={svgStyle}
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"></path>
+        </svg>
+    );
+};
+
+export const QuanLiTiKi = () => {
+    return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M14.4502 1.04387C12.7301 0.179997 10.7547 -0.155053 8.8445 0.0662299C5.15543 0.450037 1.83253 3.08668 0.598636 6.58095C-0.25034 8.90254 -0.195333 11.5417 0.757405 13.8245C1.64114 15.9761 3.30758 17.7926 5.37158 18.8665C7.23943 19.8479 9.42581 20.208 11.5098 19.8842C13.3552 19.6116 15.1115 18.7965 16.5205 17.5776C18.1307 16.2011 19.2832 14.2983 19.7495 12.2305C20.256 10.0265 19.9897 7.65236 18.9932 5.62205C18.037 3.65176 16.4118 2.01652 14.4502 1.04387Z"
+                fill="#FDD835"
+            ></path>
+            <path
+                opacity="0.5"
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M13.9817 1.98661C12.4427 1.21366 10.6753 0.913881 8.96611 1.11187C5.66537 1.45528 2.69225 3.81438 1.58823 6.94083C0.828624 9.01805 0.87784 11.3794 1.73029 13.4219C2.521 15.347 4.01203 16.9723 5.85876 17.9332C7.62825 18.8268 9.69627 19.1703 11.6821 18.8171C13.1771 18.5389 14.6988 17.755 15.8419 16.5868C17.3501 15.0914 18.3397 12.9915 18.7526 10.7893C19.2445 8.65957 18.8315 6.5591 17.8414 4.79677C16.8183 3.05937 15.1288 1.68235 13.9817 1.98661Z"
+                fill="#FBC02D"
+            ></path>
+            <path
+                d="M13.5605 10.3046C13.2586 10.3046 12.9636 10.5307 12.9636 10.8043V14.3743C12.9636 14.6478 13.2586 14.873 13.5605 14.873C13.8624 14.873 14.1574 14.6478 14.1574 14.3743V10.8043C14.1574 10.5307 13.8624 10.3046 13.5605 10.3046Z"
+                fill="white"
+            ></path>
+            <path
+                d="M13.5605 16.3331C13.2586 16.3331 12.9636 16.5592 12.9636 16.8328C12.9636 17.1064 13.2586 17.3325 13.5605 17.3325C13.8624 17.3325 14.1574 17.1064 14.1574 16.8328C14.1574 16.5592 13.8624 16.3331 13.5605 16.3331Z"
+                fill="white"
+            ></path>
+            <path
+                d="M6.44088 10.8043C6.44088 10.5307 6.14591 10.3046 5.84397 10.3046C5.54204 10.3046 5.24707 10.5307 5.24707 10.8043V14.3743C5.24707 14.6478 5.54204 14.873 5.84397 14.873C6.14591 14.873 6.44088 14.6478 6.44088 14.3743V10.8043Z"
+                fill="white"
+            ></path>
+            <path
+                d="M5.84397 16.3331C5.54204 16.3331 5.24707 16.5592 5.24707 16.8328C5.24707 17.1064 5.54204 17.3325 5.84397 17.3325C6.14591 17.3325 6.44088 17.1064 6.44088 16.8328C6.44088 16.5592 6.14591 16.3331 5.84397 16.3331Z"
+                fill="white"
+            ></path>
+        </svg>
+    );
+};

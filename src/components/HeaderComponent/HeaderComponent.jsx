@@ -19,28 +19,22 @@ import { ShoppingCartOutlined } from '@ant-design/icons';
 
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import * as Productservice from '../../service/Productservice';
 const { Search } = Input;
 
 function HeaderComponent() {
     const user = useSelector((state) => state.user);
     const [userName, setUsername] = useState('');
     const order = useSelector((state) => state.order.orderItems);
-    console.log(order);
     const [userAvatar, setUserAvatar] = useState('');
+    const [type, setType] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
         setUsername(user?.name);
         setUserAvatar(user?.avatar);
     }, [user?.name, user?.avatar]);
 
-    const handleOnclickLogin = () => {
-        navigate('/sign-in');
-    };
-
-    const handleProfile = () => {
-        navigate('/profile_page');
-    };
-
+   
     const renderPreview = () => (
         <div
             style={{
@@ -58,7 +52,9 @@ function HeaderComponent() {
                     </a>
                 </WrapperListAccountTippiLi>
                 <WrapperListAccountTippiLi>
-                    <a style={{ color: '#27272A', marginLeft: '12px' }}>Đơn hàng của tôi</a>
+                    <a style={{ color: '#27272A', marginLeft: '12px' }} href="/my_order">
+                        Đơn hàng của tôi
+                    </a>
                 </WrapperListAccountTippiLi>
                 <WrapperListAccountTippiLi>
                     <a style={{ color: '#27272A', marginLeft: '12px' }}>Trung tâm hỗ trợ</a>
@@ -95,15 +91,6 @@ function HeaderComponent() {
                     <div>
                         <Search placeholder="input search text" allowClear enterButton="Search" size="large" />
                         <WrapperList>
-                            <li>
-                                <WrapperListItem>Điện gia dụng</WrapperListItem>
-                            </li>
-                            <li>
-                                <WrapperListItem>Điện gia dụng</WrapperListItem>
-                            </li>
-                            <li>
-                                <WrapperListItem>Điện gia dụng</WrapperListItem>
-                            </li>
                             <li>
                                 <WrapperListItem>Điện gia dụng</WrapperListItem>
                             </li>

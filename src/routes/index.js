@@ -55,7 +55,7 @@ const routes = [
         isShowHeader: true,
     },
     {
-        path: '/myorder',
+        path: '/my_order',
         page: Myorder,
         isShowHeader: true,
     },
@@ -79,6 +79,12 @@ const routes = [
         path: '/product/trash',
         page: ProductTrash,
         isPrivate: true,
+    },
+    {
+        path: '/product/:type',
+        page: TypeProductPage,
+        isPrivate: true,
+        isShowHeader: true,
     },
     {
         path: '*',

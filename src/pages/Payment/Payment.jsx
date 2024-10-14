@@ -43,8 +43,6 @@ function Payment() {
 
     const dispatch = useDispatch();
 
-    const navigate = useNavigate();
-
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('tienmat');
 
     const handleChange = (e) => {
@@ -54,7 +52,7 @@ function Payment() {
     const selectedPaymentDescription = payment[selectedPaymentMethod];
 
     const mutationAddOrder = useMutationHooks((data) => Orderservice.createOrder(data));
-
+    console.log(mutationAddOrder);
     const totalPrice = location.state.totalPrice + shippingFee;
     const handleAddOrder = () => {
         mutationAddOrder.mutate(
@@ -72,21 +70,25 @@ function Payment() {
             },
             {
                 onSuccess: () => {
-                    if (mutationAddOrder.data.status === 'err') {
-                        message.error('Sản phẩm trong kho đã hết ! Vui lòng quay lại sau');
+                    // Kiểm tra phản hồi từ API
+                    if (mutationAddOrder.data && mutationAddOrder.data.status === 'err') {
+                        // Nếu có thông tin chi tiết về sản phẩm không đủ số lượng, hiển thị nó
+                        if (mutationAddOrder.data.deta && mutationAddOrder.data.details.length > 0) {
+                            const messages = mutationAddOrder.data.details.map(
+                                (item) =>
+                                    `Sản phẩm với ID ${item.productId} không đủ số lượng tồn kho hoặc không tồn tại.`,
+                            );
+                            message.error(messages.join(' '));
+                        } else {
+                            message.error('Sản phẩm trong kho đã hết ! Vui lòng quay lại sau');
+                        }
                     } else {
                         dispatch(removeAllOrder({ listChecked: idProduct }));
                         message.success('Đặt hàng thành công');
                     }
                 },
                 onError: (error) => {
-                    if (error?.response?.data?.status === 'err') {
-                        message.error(error.response.data.message || 'Có lỗi xảy ra, vui lòng thử lại.');
-                    } else if (error?.message) {
-                        message.error(error.message);
-                    } else {
-                        message.error('Có lỗi xảy ra, vui lòng thử lại.');
-                    }
+                    message.error(error?.response?.data?.message || 'Có lỗi xảy ra, vui lòng thử lại.');
                 },
             },
         );

@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import routes from './routes';
 import DefaultComponent from './components/DefaultComponent/DefaultComponent';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { jwtDecode } from 'jwt-decode'; // Import đúng jwtDecode không có dấu {}
+import { jwtDecode } from 'jwt-decode';
 import * as Userservice from './service/Userservice';
 import { useDispatch } from 'react-redux';
 import { updateUser } from './redux/slides/userSlide';
@@ -25,6 +25,7 @@ const App = () => {
     const handleGetDetailUser = async (id, token) => {
         try {
             const res = await Userservice.getDetailUser(id, token);
+            console.log(res);
             dispatch(
                 updateUser({
                     ...res.data,
@@ -54,23 +55,26 @@ const App = () => {
         async (config) => {
             try {
                 const currentTime = new Date().getTime() / 1000;
-                const { decode } = handleDecoded();
+                const { decode, storageData } = handleDecoded(); // Lấy token hiện tại và giải mã nó
                 console.log('decode', decode);
+
+                // Nếu token đã hết hạn
                 if (decode?.exp < currentTime) {
                     // Gọi API để refresh token
-                    const { data } = await Userservice.refreshToken();
+                    const data = await Userservice.refreshToken(); // refreshToken là hàm bạn định nghĩa
+                    console.log(data, 'data');
+
                     if (data?.access_token) {
                         // Cập nhật header với access_token mới
-                        config.headers['Authorization'] = `Bearer ${data.access_token}`;
+                        config.headers['authorization'] = `Bearer ${data.access_token}`;
                         // Lưu access_token mới vào localStorage
-                        localStorage.setItem('access_token_new', data.access_token);
+                        localStorage.setItem('access_token', data.access_token);
                     } else {
                         console.error('Failed to refresh token. No access_token returned.');
-                        // Xử lý khi không thể refresh token
                     }
                 } else {
                     // Cập nhật header nếu token chưa hết hạn
-                    config.headers['authorization'] = `Bearer ${localStorage.getItem('access_token')}`;
+                    config.headers['authorization'] = `Bearer ${storageData}`;
                 }
 
                 return config;

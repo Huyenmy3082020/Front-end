@@ -28,12 +28,15 @@ export const getDetailUser = async (id, access_token) => {
 export const refreshToken = async () => {
     try {
         const res = await axios.post(
-            `http://localhost:2000/api/user/refresh-token`,
-            {},
+            'http://localhost:2000/api/user/refreshtoken', // Địa chỉ API của bạn
+            {}, // Body trống (nếu không cần gửi dữ liệu)
             {
-                withCredentials: true,
+                withCredentials: true, // Đảm bảo gửi cookie
             },
         );
+        console.log(res.data); // In ra kết quả từ server
+
+        return res.data; // Trả về dữ liệu nhận được từ server
     } catch (error) {
         console.error('Error in refreshToken:', error);
         throw error;

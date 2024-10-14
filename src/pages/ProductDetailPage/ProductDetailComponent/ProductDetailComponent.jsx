@@ -213,9 +213,7 @@ function ProductDetailComponent() {
                             </span>
                             <div style={{ paddingTop: '16px' }}>
                                 {' '}
-                                <button className={styles.muangay} onClick={handleAddOrderProduc}>
-                                    Mua ngay
-                                </button>
+                                <button className={styles.muangay}>Mua ngay</button>
                             </div>
                             <div style={{ paddingTop: '16px' }}>
                                 {' '}
@@ -223,7 +221,9 @@ function ProductDetailComponent() {
                             </div>
                             <div style={{ paddingTop: '16px' }}>
                                 {' '}
-                                <button className={styles.muatruoctrasau}>Thêm vào giỏ</button>
+                                <button className={styles.muatruoctrasau} onClick={handleAddOrderProduc}>
+                                    Thêm vào giỏ
+                                </button>
                             </div>
                         </div>
                         <div style={{ paddingTop: '16px' }}>

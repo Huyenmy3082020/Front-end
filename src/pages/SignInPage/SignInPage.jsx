@@ -13,7 +13,7 @@ import * as Userservice from '../../service/Userservice';
 import { useMutationHooks } from '../../hooks/useMutationHook';
 import SpinnerComponent from '../../components/Spinner/spinnerComponent';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode'; // Sửa lại import
+import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../../redux/slides/userSlide';
 
@@ -56,12 +56,13 @@ function SignInPage() {
                 onSuccess: (data) => {
                     setIsLoading(false);
                     handleHome();
+                    console.log(data);
 
-                    localStorage.setItem('access_token', data?.ACCESS_TOKEN_SECRET);
+                    localStorage.setItem('access_token', data?.accessToken);
                     if (data?.ACCESS_TOKEN_SECRET) {
                         try {
-                            const decode = jwtDecode(data?.ACCESS_TOKEN_SECRET);
-                            handleGetDetailUser(decode?.payload.id, data?.ACCESS_TOKEN_SECRET);
+                            const decode = jwtDecode(data?.accessToken);
+                            handleGetDetailUser(decode?.payload.id, data?.accessToken);
                         } catch (decodeError) {
                             setErrorMessage('Failed to decode the token.');
                         }

@@ -11,36 +11,85 @@ import CardComponent from '../../components/CardComponent/CardComponent';
 import * as Productservice from '../../service/Productservice';
 
 function HomePage() {
-    const user = useSelector((state) => state.user);
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate(); // Khởi tạo useNavigate
+    const [limit, setLimit] = useState(5); // Số lượng sản phẩm hiển thị ban đầu
+    const [types, setType] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchProductAll = async () => {
+        const fetchAllType = async () => {
             try {
-                const res = await Productservice.getAllProduct();
-                setProducts(res.data || []);
+                const res = await Productservice.getAllType();
+                setType(res.data);
             } catch (error) {
-                console.error('Error fetching products:', error);
-            } finally {
-                setIsLoading(false);
+                console.error('Error fetching all types:', error);
             }
         };
-
-        fetchProductAll();
+        fetchAllType();
     }, []);
 
-    const handleOnClick = (productId) => {
-        console.log(productId);
+    const fetchProductAll = async (limit) => {
+        try {
+            const res = await Productservice.getAllProduct(limit);
+            return res.data;
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            return [];
+        }
+    };
+    // Sử dụng useEffect để fetch sản phẩm khi limit thay đổi
+    useEffect(() => {
+        const fetchData = async () => {
+            setIsLoading(true);
+            const newProducts = await fetchProductAll(limit);
+            setProducts(newProducts);
+            setIsLoading(false);
+        };
+
+        fetchData();
+    }, [limit]); // Mỗi khi limit thay đổi, gọi lại API để lấy thêm sản phẩm
+
+    const handleLoadMore = () => {
+        setLimit((prevLimit) => prevLimit + 6); // Tăng limit thêm 6 mỗi lần nhấn
     };
 
     if (isLoading) {
         return <div>Loading...</div>; // Hiển thị thông báo tải
     }
 
+    const handleType = (type) => {
+        navigate(`/product/${type}`);
+    };
+
     return (
         <div style={{ padding: '0 90px' }}>
+            <div>
+                {types.map(
+                    (
+                        type,
+                        index, // Đảm bảo bạn truyền index nếu cần
+                    ) => (
+                        <ul
+                            key={index}
+                            style={{ display: 'flex', listStyle: 'none', margin: '0 0', padding: '4px 0px' }}
+                        >
+                            <li
+                                onClick={() => handleType(type)}
+                                style={{
+                                    padding: '4px',
+                                    fontSize: '1.3rem',
+                                    color: 'rgb(128, 128, 137)',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                {type}
+                            </li>
+                        </ul>
+                    ),
+                )}
+            </div>
+
             <div id="container">
                 <SliderComponent arrImg={[slider1, slider2, slider3]} />
                 <div
@@ -64,13 +113,15 @@ function HomePage() {
                 </div>
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
                     <WrapperBtnMore
-                        textButton="Xem thêm đi"
+                        onClick={handleLoadMore} // Gọi hàm handleLoadMore khi nhấn vào
+                        textButton="Xem thêm"
                         styleButton={{
                             border: '1px solid rgb(11,116,229)',
                             color: 'rgb(11,116,229)',
                             width: '240px',
                             height: '28px',
                             borderRadius: '4px',
+                            cursor: 'pointer',
                         }}
                         styleTextButton={{ color: '#1890ff', fontWeight: 500 }}
                     />

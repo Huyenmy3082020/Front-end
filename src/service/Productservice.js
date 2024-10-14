@@ -58,8 +58,23 @@ export const getProductById = async (id) => {
         const res = await axios.get(`http://localhost:2000/product/getProductbyId/${id}`);
         return res.data.data;
     } catch (error) {
-        a;
         console.error('Error in deleteMany:', error);
+        throw error;
+    }
+};
+export const getAllType = async () => {
+    try {
+        const res = await axios.get(`http://localhost:2000/product/getAllType`);
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+};
+export const getProductType = async (type) => {
+    try {
+        const res = await axios.get(`http://localhost:2000/product/product/${type}`);
+        return res.data;
+    } catch (error) {
         throw error;
     }
 };
