@@ -4,6 +4,7 @@ import { StarFilled } from '@ant-design/icons';
 import now from '../../assets/images/now.png';
 import sale from '../../assets/images/sale.png';
 import { useNavigate } from 'react-router-dom';
+import { convertPrice } from '../../ultil';
 function CardComponent(props) {
     const { countInStock, description, image, name, price, rating, type, discount, selled, id } = props;
     const navigate = useNavigate();
@@ -17,14 +18,14 @@ function CardComponent(props) {
                 handleDetailProduct(id);
             }}
             hoverable
-            headStyle={{ width: '200px', height: '200px' }}
+            headStyle={{ width: '150px', height: '150px' }}
             style={{
-                width: 200,
+                width: 150,
             }}
             bodyStyle={{ padding: '10px' }}
             cover={<img alt="example" src={image} style={{ position: 'relative' }} />}
         >
-            <img src={sale} style={{ height: '200px', width: '200px', position: 'absolute', top: '0', left: '0' }} />
+            <img src={sale} style={{ height: '15px', width: '150px', position: 'absolute', top: '0', left: '0' }} />
 
             <StyleNameProduct>{name}</StyleNameProduct>
             <WrapperReportText>
@@ -36,7 +37,7 @@ function CardComponent(props) {
                 </span>
             </WrapperReportText>
             <WrapperPriceText>
-                {price} <Discount>{discount || 5}%</Discount>
+                {convertPrice(price)} <Discount>{discount || 5}%</Discount>
             </WrapperPriceText>
             <div
                 style={{
@@ -47,7 +48,7 @@ function CardComponent(props) {
                     alignItems: 'center',
                 }}
             >
-                <img src={now} style={{ width: '32px', height: '16px' }} />
+                <img src={now} style={{ width: '28px', height: '13px' }} />
                 <SupperShipperText>Giao siêu tốc 2h</SupperShipperText>
             </div>
         </WrapperCardStyle>

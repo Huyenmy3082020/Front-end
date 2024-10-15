@@ -16,9 +16,7 @@ import doitrahang from '../../../assets/doitrahang.png';
 import dongkiemhang from '../../../assets/dongkiemhang.png';
 
 import thanhtoan from '../../../assets/thanhtoan.png';
-import slider1 from '../../../assets/slider1.png.webp';
-import slider2 from '../../../assets/slider1.png.webp';
-import slider3 from '../../../assets/slider1.png.webp';
+
 import SliderComponentCustom from '../../../components/SliderProductDetail/SliderProductDetail';
 import { convertPrice } from '../../../ultil';
 import { useDispatch, useSelector } from 'react-redux';
@@ -61,6 +59,8 @@ function ProductDetailComponent() {
 
         navigate('/order', { state: { orderItem } });
     };
+
+    const handleBuyProduct = () => {};
 
     return (
         <div style={{ paddingTop: '40px', paddingRight: '30px', paddingLeft: '30px' }}>
@@ -213,7 +213,9 @@ function ProductDetailComponent() {
                             </span>
                             <div style={{ paddingTop: '16px' }}>
                                 {' '}
-                                <button className={styles.muangay}>Mua ngay</button>
+                                <button className={styles.muangay} onClick={handleBuyProduct}>
+                                    Mua ngay
+                                </button>
                             </div>
                             <div style={{ paddingTop: '16px' }}>
                                 {' '}
@@ -226,9 +228,7 @@ function ProductDetailComponent() {
                                 </button>
                             </div>
                         </div>
-                        <div style={{ paddingTop: '16px' }}>
-                            <SliderComponentCustom arrImg={[slider1, slider2, slider3]} />
-                        </div>
+                        <div style={{ paddingTop: '16px' }}></div>
                     </Col>
                 </Row>
             </div>

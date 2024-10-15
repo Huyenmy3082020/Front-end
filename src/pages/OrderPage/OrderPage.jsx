@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import styles from '../../pages/OrderPage/OrderPage.module.scss';
-import { Col, Row, Steps, Checkbox } from 'antd';
+import { Col, Row, Checkbox } from 'antd';
 import topdeal from '../../assets/topdeal.png';
 import chinhhang from '../../assets/chinhhang.png';
 import doitrahang from '../../assets/doitra.png';
@@ -208,7 +208,7 @@ function OrderPage() {
                     <div className={styles.wrapperRight}>
                         <div className={styles.wrapperRightList}>
                             <span style={{ color: 'rgb(128, 128, 137)' }}>Giao tới</span>
-                            <a>Thay đổi</a>
+                            <a href="profile_page">Thay đổi</a>
                         </div>
                         <div style={{ paddingTop: '8px' }}>
                             <span>

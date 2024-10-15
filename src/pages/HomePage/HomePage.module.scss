@@ -1,0 +1,40 @@
+.WrapperItemRight {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-self: stretch;
+}
+.WrapperItemRightLan1 {
+    padding: 16px;
+    border-radius: 10px;
+    background-color: #fff;
+    margin-top: 10px;
+}
+.wrapper {
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: #f5f5fa;
+}
+.wrapperList {
+    list-style: none;
+    padding: 0 0;
+    display: flex;
+}
+.wrapperItem {
+    width: 100px;
+}
+.wrapperItemLink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgb(39, 39, 42);
+    font-weight: 500;
+    font-size: 1.5rem;
+    justify-self: center;
+}
+.ItemTitle {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    padding-top: 8px;
+}

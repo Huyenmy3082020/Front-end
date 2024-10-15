@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 const persistedUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
 const initialState = {
@@ -28,6 +29,8 @@ export const userSlide = createSlice({
                 isAdmin = state.isAdmin,
             } = action.payload;
 
+            // Chỉnh sửa trực tiếp state
+
             state.name = name || email;
             state.email = email;
             state.phone = phone;
@@ -37,18 +40,15 @@ export const userSlide = createSlice({
             state.id = _id;
             state.isAdmin = isAdmin;
 
-            const newUser = action.payload;
-            localStorage.setItem('user', JSON.stringify(newUser));
-            return newUser;
+            localStorage.setItem('user', JSON.stringify(action.payload));
         },
         logout(state) {
             localStorage.removeItem('user'); // Xóa thông tin người dùng khi đăng xuất
-            return null;
+            return initialState; // Quay lại trạng thái khởi tạo
         },
     },
 });
 
-// Tạo action creators cho từng reducer
-export const { updateUser } = userSlide.actions;
+export const { updateUser, logout } = userSlide.actions;
 
 export default userSlide.reducer;

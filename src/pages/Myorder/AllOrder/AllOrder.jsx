@@ -6,12 +6,14 @@ import { Empty, message } from 'antd';
 import { convertPrice } from '../../../ultil';
 
 function AllOrder() {
-    const [allOrder, setAllOrder] = useState([]);
-    console.log(allOrder.isPaid);
+    const [allOrder, setAllOrder] = useState('');
+    console.log(allOrder);
     useEffect(() => {
         const fetchOrders = async () => {
             try {
                 const result = await OrderService.getOrder();
+                console.log(result.data);
+
                 setAllOrder(result.data); // Dữ liệu trả về từ API có thể được truy cập qua result.data
             } catch (error) {
                 console.error('Failed to fetch orders:', error);
@@ -72,6 +74,24 @@ function AllOrder() {
                                     </span>
                                 </div>
                             )}
+                            {order?.isPaid === true ? (
+                                <div>
+                                    <img
+                                        src="https://frontend.tikicdn.com/_desktop-next/static/img/account/indicator.png"
+                                        alt=""
+                                        width="24px"
+                                        height="24px"
+                                        style={{ marginRight: '4px' }}
+                                    />
+                                    <span
+                                        style={{ color: 'rgb(128, 128, 137)', fontWeight: '500', fontSize: '1.4rem' }}
+                                    >
+                                        Đã thanh toán bằng phương thức : PayPal
+                                    </span>
+                                </div>
+                            ) : (
+                                <div></div>
+                            )}
                             <div className={styles.wrapper}>
                                 {order.orderItems.map((item) => (
                                     <div
@@ -123,7 +143,7 @@ function AllOrder() {
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                 <button className={styles.btnMua}>Mua lại</button>
-                                <button className={styles.btnMua}>Xem chi tiết</button>
+                                <div id="paypal-button-container"></div>
                                 <button className={styles.btnMua} onClick={() => handleCancleOrder(order._id)}>
                                     Hủy
                                 </button>

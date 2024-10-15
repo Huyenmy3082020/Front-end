@@ -8,6 +8,7 @@ import { jwtDecode } from 'jwt-decode';
 import * as Userservice from './service/Userservice';
 import { useDispatch } from 'react-redux';
 import { updateUser } from './redux/slides/userSlide';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => {
         if (storageData) {
             try {
                 decode = jwtDecode(storageData);
+                console.log('decode', decode);
             } catch (error) {
                 console.error('Error decoding token:', error);
             }

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Card } from 'antd';
 export const StyleNameProduct = styled.h1`
     font-weight: 450;
-    font-size: 16px;
+    font-size: 13px;
     display: block;
     line-height: 16px;
     height: 3.5rem;
@@ -26,11 +26,7 @@ export const WrapperPriceText = styled.div`
     padding-bottom: 16px;
 `;
 export const WrapperCardStyle = styled(Card)`
-    width: 200px;
-    & img {
-        height: 200px;
-        width: 200px;
-    }
+    width: 150px;
     position: relative;
 `;
 export const Discount = styled.span`

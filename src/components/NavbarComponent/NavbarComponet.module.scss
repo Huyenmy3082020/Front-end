@@ -1,5 +1,9 @@
 .wrapper {
     padding: 4px;
+    background-color: #fff;
+    margin-top: 12px;
+    margin-right: 16px;
+    border-radius: 8px;
 }
 .wrapperList {
     list-style: none;
@@ -10,7 +14,6 @@
 .wrapperItem {
     padding: 8px 16px;
     width: 100%;
-    border-bottom: 1px solid #ddd;
 }
 
 .wrapperItemLink {

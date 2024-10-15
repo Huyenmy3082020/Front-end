@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Badge, Col, Input } from 'antd';
 
 import {
@@ -19,22 +19,15 @@ import { ShoppingCartOutlined } from '@ant-design/icons';
 
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import * as Productservice from '../../service/Productservice';
 const { Search } = Input;
 
 function HeaderComponent() {
     const user = useSelector((state) => state.user);
-    const [userName, setUsername] = useState('');
     const order = useSelector((state) => state.order.orderItems);
-    const [userAvatar, setUserAvatar] = useState('');
-    const [type, setType] = useState([]);
     const navigate = useNavigate();
-    useEffect(() => {
-        setUsername(user?.name);
-        setUserAvatar(user?.avatar);
-    }, [user?.name, user?.avatar]);
-
-   
+    const hanldenavigateOrder = () => {
+        navigate('/order');
+    };
     const renderPreview = () => (
         <div
             style={{
@@ -57,10 +50,14 @@ function HeaderComponent() {
                     </a>
                 </WrapperListAccountTippiLi>
                 <WrapperListAccountTippiLi>
-                    <a style={{ color: '#27272A', marginLeft: '12px' }}>Trung tâm hỗ trợ</a>
+                    <a style={{ color: '#27272A', marginLeft: '12px' }} href="/support">
+                        Trung tâm hỗ trợ
+                    </a>
                 </WrapperListAccountTippiLi>
                 <WrapperListAccountTippiLi>
-                    <a style={{ color: '#27272A', marginLeft: '12px' }}>Đăng xuất</a>
+                    <a style={{ color: '#27272A', marginLeft: '12px' }} href="/log_out">
+                        Đăng xuất
+                    </a>
                 </WrapperListAccountTippiLi>
                 <WrapperListAccountTippiLi>
                     <a style={{ color: '#27272A', marginLeft: '12px' }} href="/sign-in">
@@ -124,6 +121,7 @@ function HeaderComponent() {
                                 <div style={{ marginLeft: '16px' }}>
                                     <Badge count={order.length > 0 ? order.length : 0} size="small">
                                         <ShoppingCartOutlined
+                                            onClick={hanldenavigateOrder}
                                             style={{ fontSize: '24px', color: '#1677ff', cursor: 'pointer' }}
                                         />
                                     </Badge>
@@ -136,6 +134,7 @@ function HeaderComponent() {
                             <div style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
                                 <img
                                     src="https://salt.tikicdn.com/ts/upload/88/5c/9d/f5ee506836792eb7775e527ef8350a44.png"
+                                    alt="tiki"
                                     style={{
                                         width: '20px',
                                         height: '20px',

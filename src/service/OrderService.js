@@ -15,6 +15,12 @@ export const getOrder = async () => {
         return res.data;
     } catch (error) {}
 };
+export const getOrderPaid = async () => {
+    try {
+        const res = await axios.get('http://localhost:2000/order/getOrderPage');
+        return res.data;
+    } catch (error) {}
+};
 export const deleteOrder = async (id) => {
     const res = await axios.delete(`http://localhost:2000/order/deleteOrder/${id}`);
     return res.data;
