@@ -6,12 +6,14 @@ import sale from '../../assets/images/sale.png';
 import { useNavigate } from 'react-router-dom';
 import { convertPrice } from '../../ultil';
 function CardComponent(props) {
-    const { countInStock, description, image, name, price, rating, type, discount, selled, id } = props;
+    const { countInStock, description, image, name, price, rating, type, discount, selled, id, width } = props;
+
     const navigate = useNavigate();
 
     const handleDetailProduct = (id) => {
         navigate(`/product_detail/${id}`);
     };
+
     return (
         <WrapperCardStyle
             onClick={() => {
@@ -20,19 +22,17 @@ function CardComponent(props) {
             hoverable
             headStyle={{ width: '150px', height: '150px' }}
             style={{
-                width: 150,
+                width: width || '200px', // Sử dụng width từ props, nếu không có thì mặc định là 200px
             }}
             bodyStyle={{ padding: '10px' }}
             cover={<img alt="example" src={image} style={{ position: 'relative' }} />}
         >
-            <img src={sale} style={{ height: '15px', width: '150px', position: 'absolute', top: '0', left: '0' }} />
-
             <StyleNameProduct>{name}</StyleNameProduct>
             <WrapperReportText>
                 <span style={{ marginRight: '16px' }}>
                     <span>{rating}</span>
-                    <StarFilled style={{ fontSize: '10px', color: 'yellow' }} />
-                    <span style={{ marginLeft: '10px' }}>Đá bán {countInStock}</span>
+                    <StarFilled style={{ fontSize: '14px', color: 'yellow' }} />
+                    <span style={{ marginLeft: '10px' }}>Đã bán {countInStock}</span>
                     <span style={{ marginLeft: '6px', position: 'relative' }}>{selled}</span>
                 </span>
             </WrapperReportText>

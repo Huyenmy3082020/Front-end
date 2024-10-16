@@ -20,7 +20,7 @@ import topdeal from '../../assets/nav/topdeal.png';
 
 import CardComponent from '../../components/CardComponent/CardComponent';
 import * as Productservice from '../../service/Productservice';
-import { Col, Row } from 'antd';
+import { Col, Row, Spin } from 'antd';
 import NavbarComponent from '../../components/NavbarComponent/NavbarComponent';
 import * as CategorySevice from '../../service/CategoriService';
 function HomePage() {
@@ -80,9 +80,9 @@ function HomePage() {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>; // Hiển thị thông báo tải
+        return <Spin></Spin>; // Hiển thị thông báo tải
     }
-
+    const width = '150px';
     return (
         <div className={styles.wrapper}>
             <div className={styles.wrapperList}>
@@ -250,6 +250,7 @@ function HomePage() {
                                         type={product.type}
                                         discount={product.discount}
                                         selled={product.selled}
+                                        width={width}
                                     />
                                 ))}
                             </div>

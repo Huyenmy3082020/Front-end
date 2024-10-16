@@ -64,7 +64,7 @@ function AdminProduct() {
             values.selled,
             values.description,
         );
-        setIsModalOpen(false);
+        // setIsModalOpen(false);
     };
 
     const onFinishFailed = (errorInfo) => {};

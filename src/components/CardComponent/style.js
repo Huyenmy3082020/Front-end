@@ -26,7 +26,7 @@ export const WrapperPriceText = styled.div`
     padding-bottom: 16px;
 `;
 export const WrapperCardStyle = styled(Card)`
-    width: 150px;
+    width: 200px;
     position: relative;
 `;
 export const Discount = styled.span`

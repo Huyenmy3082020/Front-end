@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from '../../components/NavbarComponent/NavbarComponet.module.scss';
 import * as CategorySevice from '../../service/CategoriService';
+import { useNavigate } from 'react-router-dom';
 
 function NavbarComponent(type, productType) {
     const [categories, setCategories] = useState([]);
@@ -9,7 +10,7 @@ function NavbarComponent(type, productType) {
         const fetchCategories = async () => {
             try {
                 const data = await CategorySevice.getCategoryname();
-                setCategories(data); // Lưu danh sách vào state
+                setCategories(data);
             } catch (error) {
                 console.error('Failed to fetch categories:', error);
             }
@@ -17,8 +18,14 @@ function NavbarComponent(type, productType) {
 
         fetchCategories();
     }, []);
+    const navigate = useNavigate();
 
-    console.log('type, productType', type, productType);
+    const handleGetTypeProduct = async (slug) => {
+        try {
+            navigate(`/categories/${slug}`);
+        } catch (error) {}
+    };
+
     return (
         <div className={styles.wrapper}>
             <p
@@ -35,10 +42,15 @@ function NavbarComponent(type, productType) {
             <ul className={styles.wrapperList}>
                 {categories.map((categorie) => {
                     return (
-                        <li className={styles.wrapperItem}>
-                            <a href="" className={styles.wrapperItemLink}>
+                        <li
+                            className={styles.wrapperItem}
+                            onClick={() => {
+                                handleGetTypeProduct(categorie.slug);
+                            }}
+                        >
+                            <a className={styles.wrapperItemLink}>
                                 <img src={categorie.image} alt="" className={styles.wrapprerImg} />
-                                <span className={styles.wrapperName}>{categorie.name}</span>
+                                <div className={styles.wrapperName}>{categorie.name}</div>
                             </a>
                         </li>
                     );

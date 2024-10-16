@@ -11,6 +11,7 @@ import Order from '../pages/OrderPage/OrderPage';
 import ProductTrash from '../components/ProductTrash/TrashComponent';
 import OrderSusscess from '../pages/OrderSuscces/OrderSusscess';
 import Payment from '../pages/Payment/Payment';
+import CategoryProduct from '../pages/CategoryProduct/CategoryProduct';
 import Myorder from '../pages/Myorder/Myorder';
 const routes = [
     {
@@ -83,6 +84,12 @@ const routes = [
     {
         path: '/product/:type',
         page: TypeProductPage,
+        isPrivate: true,
+        isShowHeader: true,
+    },
+    {
+        path: 'categories/:slug',
+        page: CategoryProduct,
         isPrivate: true,
         isShowHeader: true,
     },
