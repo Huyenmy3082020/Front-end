@@ -203,6 +203,13 @@ const TableComponent = ({ data }) => {
                         <Input placeholder="Enter description" />
                     </Form.Item>
 
+                    <Form.Item
+                        label="Category"
+                        name="category"
+                        rules={[{ required: true, message: 'Please input Category!' }]}
+                    >
+                        <Input placeholder="Enter Category" />
+                    </Form.Item>
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                         <Button type="primary" htmlType="submit">
                             Submit

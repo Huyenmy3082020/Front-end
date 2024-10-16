@@ -1,7 +1,24 @@
-import React from 'react';
-import { Modal, Form, Input, Button } from 'antd';
-
+import React, { useEffect, useState } from 'react';
+import { Modal, Form, Input, Button, Select } from 'antd';
+import * as CategorySevice from '../../service/CategoriService';
 const ModalComponent = ({ isModalOpen, handleOk, handleCancel, onFinish, onFinishFailed }) => {
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await CategorySevice.getCategoryname();
+                setCategories(data); // Lưu danh sách vào state
+            } catch (error) {
+                console.error('Failed to fetch categories:', error);
+            }
+        };
+
+        if (isModalOpen) {
+            fetchCategories();
+        }
+    }, [isModalOpen]);
+
     return (
         <Modal title="Tạo sản phẩm" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
             <Form
@@ -27,7 +44,13 @@ const ModalComponent = ({ isModalOpen, handleOk, handleCancel, onFinish, onFinis
                 </Form.Item>
 
                 <Form.Item label="Type" name="type" rules={[{ required: true, message: 'Please input your type!' }]}>
-                    <Input placeholder="Enter type product" />
+                    <Select placeholder="Select a type">
+                        {categories.map((category) => (
+                            <Select.Option key={category._id} value={category.name}>
+                                {category.name}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </Form.Item>
 
                 <Form.Item label="Price" name="price" rules={[{ required: true, message: 'Please input your price!' }]}>

@@ -22,10 +22,26 @@ import CardComponent from '../../components/CardComponent/CardComponent';
 import * as Productservice from '../../service/Productservice';
 import { Col, Row } from 'antd';
 import NavbarComponent from '../../components/NavbarComponent/NavbarComponent';
+import * as CategorySevice from '../../service/CategoriService';
 function HomePage() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [limit, setLimit] = useState(6);
+
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await CategorySevice.getCategoryname();
+                setCategories(data); // Lưu danh sách vào state
+            } catch (error) {
+                console.error('Failed to fetch categories:', error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     useEffect(() => {
         const fetchAllType = async () => {

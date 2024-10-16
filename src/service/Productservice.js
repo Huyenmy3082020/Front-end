@@ -21,6 +21,8 @@ export const getAllProductTrash = async () => {
     } catch (error) {}
 };
 export const createProduct = async (data) => {
+    console.log(data);
+
     const res = await axios.post(`http://localhost:2000/product/create`, data);
     return res.data;
 };

@@ -3,12 +3,14 @@ import { Button, Form, Input, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import TableComponent from '../../TableComponent/TableComponent';
 import * as Productservice from '../../../service/Productservice';
-
+import * as CategoriService from '../../../service/CategoriService.js';
 import ModalComponent from '../../ModalComponent/ModalComponent.jsx';
 function AdminProduct() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [products, setProducts] = useState([]);
     const [avatar, setAvatar] = useState('');
+    const [productType, setProductType] = useState(''); // State để lưu type
+
     const handleOk = () => {
         setIsModalOpen(false);
     };
@@ -31,12 +33,30 @@ function AdminProduct() {
 
         fetchProductAll();
     }, []);
-    console.log(products);
+    const [category, setCategory] = useState('');
+
+    useEffect(() => {
+        const fetchCategoryByName = async () => {
+            try {
+                const res = await CategoriService.getOrderByName(productType);
+                setCategory(res);
+            } catch (error) {
+                console.error('Error fetching category:', error);
+            }
+        };
+
+        if (productType) {
+            fetchCategoryByName();
+        }
+    }, [productType]);
+
     const onFinish = (values) => {
+        console.log(values.type);
+        setProductType(values.type);
         handleOnCreateProduct(
             values.Name,
             values.image,
-            values.type,
+            category._id,
             values.price,
             values.countInStock,
             values.rating,
@@ -60,7 +80,6 @@ function AdminProduct() {
         selled,
         description,
     ) => {
-        // Chỉ sử dụng các giá trị đơn giản từ form
         const productData = {
             name,
             image,
@@ -76,31 +95,13 @@ function AdminProduct() {
         try {
             // Gọi API để tạo sản phẩm
             const res = await Productservice.createProduct(productData);
+
             console.log('Product created successfully:', res);
         } catch (error) {
             console.error('Error creating product:', error);
         }
     };
 
-    // const handleOnChangeAvatar = async ({ file }) => {
-    //     // Kiểm tra nếu `file.originFileObj` có tồn tại và là đối tượng File/Blob
-    //     const fileObj = file?.originFileObj;
-
-    //     if (fileObj && (fileObj instanceof Blob || fileObj instanceof File)) {
-    //         // Kiểm tra xem file có url hay preview không
-    //         if (!file.url && !file.preview) {
-    //             try {
-    //                 // Chuyển đổi file sang base64
-    //                 file.preview = await getBase64(fileObj);
-    //             } catch (error) {
-    //                 console.error('Error reading file:', error);
-    //             }
-    //         }
-    //         setAvatar(file.preview);
-    //     } else {
-    //         console.error('Invalid file object:', file);
-    //     }
-    // };
     return (
         <div style={{ marginTop: '20px', marginLeft: '20px' }}>
             <h1 style={{ fontSize: '2.6rem' }}>Thông tin sản phẩm</h1>
