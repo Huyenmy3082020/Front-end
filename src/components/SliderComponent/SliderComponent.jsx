@@ -7,11 +7,11 @@ function SliderComponent({ arrImg }) {
         dots: true,
         infinite: true,
         focusOnSelect: true,
-        speed: 500,
+        speed: 2000,
         slidesToShow: 2, // Hiển thị 2 slide
-        slidesToScroll: 2, // Cuộn 2 slide mỗi lần
+        slidesToScroll: 2,
         autoplay: true,
-        autoplaySpeed: 4000,
+        autoplaySpeed: 3000,
     };
 
     return (

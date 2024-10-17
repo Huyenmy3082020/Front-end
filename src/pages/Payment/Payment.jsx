@@ -26,6 +26,7 @@ const initialOptions = {
 function Payment() {
     const user = useSelector((state) => state.user);
     const location = useLocation();
+
     const [selectedShipping, setSelectedShipping] = useState('giaosieutoc');
     const [idProduct, setIdProduct] = useState([]);
     const navigate = useNavigate();
@@ -37,16 +38,16 @@ function Payment() {
         setIdProduct(ids);
     }, [products]);
 
-    const [shippingFee, setShippingFee] = useState(-25000); // Phí giao siêu tốc mặc định
+    const [shippingFee, setShippingFee] = useState(25000); // Phí giao siêu tốc mặc định
 
     const handleShippingChange = (e) => {
         const { value } = e.target;
         setSelectedShipping(value);
 
         if (value === 'giaosieutoc') {
-            setShippingFee(-25000);
+            setShippingFee(25000);
         } else if (value === 'giaotietkiem') {
-            setShippingFee(-16000);
+            setShippingFee(16000);
         }
     };
 
@@ -335,7 +336,7 @@ function Payment() {
                                 <div className={styles.wrapperRightList}>
                                     <p style={{ color: 'rgb(128, 128, 137)', fontWeight: '500' }}>Giảm giá từ Deal</p>
                                     <span style={{ color: 'green' }}>
-                                        -{convertPrice(location.state.priceDisCountMemo)}
+                                        {convertPrice(location.state.priceDisCountMemo)}
                                     </span>
                                 </div>
                                 <div className={styles.wrapperRightList}>

@@ -51,7 +51,6 @@ function AdminProduct() {
     }, [productType]);
 
     const onFinish = (values) => {
-        console.log(values.type);
         setProductType(values.type);
         handleOnCreateProduct(
             values.Name,

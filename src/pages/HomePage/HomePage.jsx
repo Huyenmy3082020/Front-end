@@ -23,6 +23,7 @@ import * as Productservice from '../../service/Productservice';
 import { Col, Row, Spin } from 'antd';
 import NavbarComponent from '../../components/NavbarComponent/NavbarComponent';
 import * as CategorySevice from '../../service/CategoriService';
+import SpinnerComponent from '../../components/Spinner/spinnerComponent';
 function HomePage() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -80,7 +81,11 @@ function HomePage() {
     };
 
     if (isLoading) {
-        return <Spin></Spin>; // Hiển thị thông báo tải
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Spin></Spin>
+            </div>
+        ); // Hiển thị thông báo tải
     }
     const width = '150px';
     return (

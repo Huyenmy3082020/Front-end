@@ -14,6 +14,8 @@ export const signUpUser = async (data) => {
 
 export const getDetailUser = async (id, access_token) => {
     try {
+        console.log(id, access_token);
+
         const res = await axiosJWT.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${id}`, {
             headers: {
                 authorization: `Bearer ${access_token}`,

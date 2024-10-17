@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const persistedUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
-
 const initialState = {
     name: '',
     email: '',
@@ -28,9 +26,7 @@ export const userSlide = createSlice({
                 _id = '',
                 isAdmin = state.isAdmin,
             } = action.payload;
-
-            // Chỉnh sửa trực tiếp state
-
+            console.log(state);
             state.name = name || email;
             state.email = email;
             state.phone = phone;

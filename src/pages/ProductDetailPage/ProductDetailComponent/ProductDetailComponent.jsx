@@ -16,7 +16,7 @@ import doitrahang from '../../../assets/doitrahang.png';
 import dongkiemhang from '../../../assets/dongkiemhang.png';
 
 import thanhtoan from '../../../assets/thanhtoan.png';
-
+import * as Cartservice from '../../../service/CartService';
 import SliderComponentCustom from '../../../components/SliderProductDetail/SliderProductDetail';
 import { convertPrice } from '../../../ultil';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,8 +44,8 @@ function ProductDetailComponent() {
     const onchangeInput = (value) => {
         setNumproduct(value);
     };
-    const navigate = useNavigate(); // Khởi tạo navigate
-    const handleAddOrderProduc = () => {
+    const navigate = useNavigate();
+    const handleAddOrderProduct = async () => {
         const orderItem = {
             name: products?.name,
             amount: numProduct,
@@ -53,11 +53,22 @@ function ProductDetailComponent() {
             price: products?.price,
             discount: products?.discount,
             product: products._id,
+            user: user.id,
         };
+        console.log(orderItem);
+        try {
+            const cartData = {
+                user: user.id,
+                items: [orderItem],
+                totalPrice: orderItem.amount * orderItem.price * (1 - orderItem.discount / 100),
+            };
+            dispatch(addOrder({ orderItem }));
+            const result = await Cartservice.creataCart(cartData);
 
-        dispatch(addOrder({ orderItem }));
-
-        navigate('/order', { state: { orderItem } });
+            navigate('/order');
+        } catch (error) {
+            console.error('Failed to create cart:', error.message); // Xử lý lỗi nếu có
+        }
     };
 
     const handleBuyProduct = () => {};
@@ -223,7 +234,7 @@ function ProductDetailComponent() {
                             </div>
                             <div style={{ paddingTop: '16px' }}>
                                 {' '}
-                                <button className={styles.muatruoctrasau} onClick={handleAddOrderProduc}>
+                                <button className={styles.muatruoctrasau} onClick={handleAddOrderProduct}>
                                     Thêm vào giỏ
                                 </button>
                             </div>

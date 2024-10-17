@@ -1,7 +1,8 @@
 // src/redux/store.js
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import userReducer from './slides/userSlide'; // Đảm bảo đường dẫn đúng
-import orderReducer from './slides/OrderSlide'; // Đảm bảo đường dẫn đúng
+import userReducer from './slides/userSlide';
+import orderReducer from './slides/OrderSlide';
+import cartReducer from './slides/CartSlide';
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -16,6 +17,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     user: userReducer,
     order: orderReducer,
+    cartReducer,
 });
 
 // Tạo persisted reducer

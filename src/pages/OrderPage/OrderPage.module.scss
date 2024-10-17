@@ -1,8 +1,8 @@
 .wrapper {
     padding-top: 60px;
     padding-left: 60px;
-    height: 100000px;
     padding-right: 60px;
+    height: 1000px;
     background-color: #f5f5fa;
 }
 .wrapperTitle {
@@ -156,4 +156,13 @@
     background-color: rgb(255, 255, 255);
     margin-left: 4px;
     border-radius: 4px;
+}
+.cardEmpty {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 16px;
+    background-color: #fff;
+    margin-top: 40px;
+    border-radius: 8px;
 }

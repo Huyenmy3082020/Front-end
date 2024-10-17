@@ -50,22 +50,19 @@ function SignInPage() {
     const handleSignIn = () => {
         setIsLoading(true);
         setErrorMessage('');
-
         mutation.mutate(
             { email, password },
             {
                 onSuccess: (data) => {
                     setIsLoading(false);
                     handleHome();
-
                     localStorage.setItem('access_token', data?.accessToken);
-                    if (data?.ACCESS_TOKEN_SECRET) {
-                        try {
-                            const decode = jwtDecode(data?.accessToken);
-                            handleGetDetailUser(decode?.payload.id, data?.accessToken);
-                        } catch (decodeError) {
-                            setErrorMessage('Failed to decode the token.');
-                        }
+
+                    try {
+                        const decode = jwtDecode(data?.accessToken);
+                        handleGetDetailUser(decode?.id, data?.accessToken);
+                    } catch (decodeError) {
+                        setErrorMessage('Failed to decode the token.');
                     }
                 },
                 onError: (error) => {

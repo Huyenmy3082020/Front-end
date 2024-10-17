@@ -10,10 +10,6 @@ function OrderSusscess() {
                 <div className={styles.wrapperHeader}>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <p className={styles.textOrdersuscess}>Yay, đặt hàng thành công!</p>
-
-                        <p className={styles.textOrdersuscess}>
-                            Chuẩn bị tiền mặt {convertPrice(location.state.totalprice)}
-                        </p>
                     </div>
                     <img
                         style={{ position: 'absolute', width: '100%', height: ' 100%' }}
