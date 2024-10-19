@@ -35,7 +35,6 @@ function SignInPage() {
     const handleGetDetailUser = async (id, token) => {
         try {
             const res = await Userservice.getDetailUser(id, token);
-            console.log('res', res);
             dispatch(
                 updateUser({
                     ...res?.data,
@@ -56,6 +55,8 @@ function SignInPage() {
                 onSuccess: (data) => {
                     setIsLoading(false);
                     handleHome();
+                    console.log('data', data);
+
                     localStorage.setItem('access_token', data?.accessToken);
 
                     try {

@@ -3,7 +3,7 @@ import styles from '../../pages/Profile/ProfilePage.module.scss';
 import { useSelector } from 'react-redux';
 import * as UserService from '../../service/Userservice';
 import { useMutationHooks } from '../../hooks/useMutationHook';
-import { Avatar, Button, Col, Radio, Row, Select, Modal, Input } from 'antd';
+import { Avatar, Button, Col, Radio, Row, Select, Input } from 'antd';
 import icondienthoai from '../../assets/icondienthoai.png';
 import email from '../../assets/email (1).png';
 import NavbarProfile from '../../components/NavbarProfile/NavbarProfile.jsx';
@@ -15,13 +15,6 @@ function ProfilePage() {
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [avatar, setAvatar] = useState('');
-    const [birthday, setBirthday] = useState({ day: '', month: '', year: '' });
-    const [modalInputValue, setModalInputValue] = useState('');
-    const [modalIcon, setModalIcon] = useState('');
-
-    // State cho Modal
-    const [isModalVisible, setIsModalVisible] = useState(true);
-    const [modalContent, setModalContent] = useState('');
 
     const mutation = useMutationHooks((data) => {
         const { id, access_token, ...rest } = data;
@@ -44,10 +37,6 @@ function ProfilePage() {
         setEmail(value);
     };
 
-    const handleOnChangeBirthday = (field, value) => {
-        setBirthday((prev) => ({ ...prev, [field]: value }));
-    };
-
     const countries = [
         'Vietnam',
         'United States',
@@ -61,18 +50,6 @@ function ProfilePage() {
         'Brazil',
     ];
 
-    const handleUpdate = async () => {
-        mutation.mutate({
-            id: user?.id,
-            name,
-            phone,
-            address,
-            avatar,
-            birthday,
-            access_token: user?.access_token,
-        });
-    };
-
     useEffect(() => {
         if (user) {
             setEmail(user.email || '');
@@ -80,37 +57,14 @@ function ProfilePage() {
             setAvatar(user.avatar || '');
             setName(user.name || '');
             setAddress(user.address || '');
-            setBirthday(user.birthday || { day: '', month: '', year: '' });
         }
     }, [user]);
 
-    // Hàm mở modal
-    const showModal = (content, img) => {
-        setModalContent(content);
-        setModalIcon(img);
-        setIsModalVisible(true);
-    };
+    const handleClickUpdatePhone = () => {};
 
-    const handleOk = () => {
-        console.log('Giá trị mới: ', modalInputValue); // In ra giá trị input
-        setIsModalVisible(false);
-    };
+    const handleClickUpdateEmail = () => {};
 
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
-
-    const handleClickUpdatePhone = () => {
-        showModal('Cập nhật số điện thoại', icondienthoai);
-    };
-
-    const handleClickUpdateEmail = () => {
-        showModal('Cập nhật địa chỉ email', email);
-    };
-
-    const handleClickUpdatePassword = () => {
-        showModal('Đổi mật khẩu');
-    };
+    const handleClickUpdatePassword = () => {};
 
     return (
         <div style={{ backgroundColor: '#f5f5f5' }}>
@@ -205,7 +159,7 @@ function ProfilePage() {
                             </div>
                         </div>
 
-                        <Button type="primary" onClick={handleUpdate} style={{ marginTop: '20px' }}>
+                        <Button type="primary" style={{ marginTop: '20px' }}>
                             Lưu thay đổi
                         </Button>
                     </div>
@@ -233,7 +187,11 @@ function ProfilePage() {
                                             alt=""
                                             style={{ marginRight: '10px' }}
                                         />
-                                        <span>Số điện thoại</span>
+                                        <input
+                                            type="text"
+                                            className={styles.inputUpdate}
+                                            placeholder="Nhập số diện thoại "
+                                        />
                                     </div>
                                     <button className={styles.btnCapNhat} onClick={handleClickUpdatePhone}>
                                         Cập nhật
@@ -248,7 +206,7 @@ function ProfilePage() {
                                             alt=""
                                             style={{ marginRight: '10px' }}
                                         />
-                                        <span>Email</span>
+                                        <input type="text" className={styles.inputUpdate} placeholder="Nhập email " />
                                     </div>
                                     <button className={styles.btnCapNhat} onClick={handleClickUpdateEmail}>
                                         Cập nhật
@@ -266,30 +224,78 @@ function ProfilePage() {
                                             alt=""
                                             style={{ marginRight: '10px' }}
                                         />
-                                        <span>Đổi mật khẩu</span>
+                                        <input type="text" className={styles.inputUpdate} placeholder="Đổi mật khẩu" />
                                     </div>
                                     <button className={styles.btnCapNhat}>Cập nhật</button>
+                                </div>
+                                <div className={styles.wrapperItem}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <img
+                                            src="https://salt.tikicdn.com/ts/upload/99/50/d7/cc0504daa05199e1fb99cd9a89e60fa5.jpg"
+                                            width="24px"
+                                            height="24px"
+                                            alt=""
+                                            style={{ marginRight: '10px' }}
+                                        />
+                                        <input
+                                            type="text"
+                                            className={styles.inputUpdate}
+                                            placeholder="Thiết lập mã pin"
+                                        />
+                                    </div>
+                                    <button className={styles.btnCapNhat}>Thiết lập</button>
+                                </div>
+                                <div className={styles.wrapperItem}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <img
+                                            src="https://frontend.tikicdn.com/_desktop-next/static/img/icons/trash.svg"
+                                            width="24px"
+                                            height="24px"
+                                            alt=""
+                                            style={{ marginRight: '10px' }}
+                                        />
+                                        <input
+                                            type="text"
+                                            className={styles.inputUpdate}
+                                            placeholder="Yêu cầu xóa tài khoản"
+                                        />
+                                    </div>
+                                    <button className={styles.btnCapNhat}>Yêu cầu</button>
+                                </div>
+                            </div>
+                            <div style={{ paddingTop: '10px', color: 'rgb(100, 100, 109)' }}>
+                                <span style={{ fontSize: '1.5rem' }}>Liên kết</span>
+                                <div className={styles.wrapperItem}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <img
+                                            src="https://frontend.tikicdn.com/_desktop-next/static/img/account/facebook.png"
+                                            width="24px"
+                                            height="24px"
+                                            alt=""
+                                            style={{ marginRight: '10px' }}
+                                        />
+                                        <span>Facebook</span>
+                                    </div>
+                                    <button className={styles.btnCapNhat}>Liên kết</button>
+                                </div>
+                                <div className={styles.wrapperItem}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <img
+                                            src="https://frontend.tikicdn.com/_desktop-next/static/img/account/google.png"
+                                            width="24px"
+                                            height="24px"
+                                            alt=""
+                                            style={{ marginRight: '10px' }}
+                                        />
+                                        <span>Google</span>
+                                    </div>
+                                    <button className={styles.btnCapNhat}>Liên kết</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </Col>
             </Row>
-
-            {/* Modal */}
-            <Modal title="Cập nhật thông tin " visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                <div style={{ padding: '24px' }}>
-                    <p>{modalContent}</p>
-                    <div>
-                        <img src={modalIcon} className={styles.imgInputmodal}></img>
-                        <input
-                            value={modalInputValue}
-                            onChange={(e) => setModalInputValue(e.target.value)}
-                            className={styles.inputmodal}
-                        ></input>
-                    </div>
-                </div>
-            </Modal>
         </div>
     );
 }

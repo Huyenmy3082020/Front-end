@@ -35,12 +35,9 @@ export const userSlide = createSlice({
             state.access_token = access_token;
             state.id = _id;
             state.isAdmin = isAdmin;
-
-            localStorage.setItem('user', JSON.stringify(action.payload));
         },
         logout(state) {
-            localStorage.removeItem('user'); // Xóa thông tin người dùng khi đăng xuất
-            return initialState; // Quay lại trạng thái khởi tạo
+            return initialState;
         },
     },
 });

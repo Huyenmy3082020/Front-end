@@ -23,10 +23,8 @@ export const OrderSlide = createSlice({
             const itemOrder = state?.orderItems?.find((item) => item.product === orderItem.product);
 
             if (itemOrder) {
-                // Nếu sản phẩm đã tồn tại, cộng thêm số lượng
                 itemOrder.amount += orderItem.amount;
             } else {
-                // Nếu sản phẩm chưa tồn tại, thêm vào danh sách
                 state.orderItems.push(orderItem);
             }
         },
@@ -38,38 +36,38 @@ export const OrderSlide = createSlice({
 
         removeAllOrder: (state, action) => {
             const { listChecked } = action.payload;
-            console.log(listChecked);
             state.orderItems = state.orderItems.filter((item) => !listChecked.includes(item.product));
         },
 
         increaseOrder: (state, action) => {
-            const { idProduct } = action.payload;
-            const itemOrder = state.orderItems.find((item) => item.product === idProduct);
+            const { productId } = action.payload;
+            console.log(productId);
+
+            const itemOrder = state.orderItems.find((item) => item.product === productId);
 
             if (itemOrder) {
-                // Tăng số lượng sản phẩm lên 1
                 itemOrder.amount += 1;
             }
         },
 
         decreaseOrder: (state, action) => {
-            const { idProduct } = action.payload;
-            const itemOrder = state.orderItems.find((item) => item.product === idProduct);
-
+            const { productId } = action.payload;
+            const itemOrder = state.orderItems.find((item) => item.product === productId);
             if (itemOrder) {
-                // Giảm số lượng sản phẩm xuống 1
                 itemOrder.amount -= 1;
-
-                // Nếu số lượng sản phẩm bằng 0, loại bỏ sản phẩm khỏi danh sách
                 if (itemOrder.amount <= 0) {
-                    state.orderItems = state.orderItems.filter((item) => item.product !== idProduct);
+                    state.orderItems = state.orderItems.filter((item) => item.product !== productId);
                 }
             }
+        },
+        removeAllOrderLogOut: (state, action) => {
+            return initialState;
         },
     },
 });
 
 // Tạo action creators cho từng reducer
-export const { addOrder, increaseOrder, decreaseOrder, removeOrder, removeAllOrder } = OrderSlide.actions;
+export const { addOrder, increaseOrder, decreaseOrder, removeOrder, removeAllOrder, removeAllOrderLogOut } =
+    OrderSlide.actions;
 
 export default OrderSlide.reducer;

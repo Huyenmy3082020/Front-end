@@ -1,5 +1,4 @@
 import HomePage from '../pages/HomePage/HomePage';
-import ProductPage from '../pages/ProductsPage/ProductsPage';
 import NotFoundPage from '../pages/NotFoundPage/NotFoundPage';
 import TypeProductPage from '../pages/TypeProductPage/TypeProductPage';
 import SignUpPage from '../pages/SignUpPage/SignUpPage';
@@ -24,11 +23,7 @@ const routes = [
         page: SignInPage,
         isShowHeader: false,
     },
-    {
-        path: '/product',
-        page: ProductPage,
-        isShowHeader: true,
-    },
+
     {
         path: '/:type',
         page: TypeProductPage,
@@ -54,21 +49,25 @@ const routes = [
         path: '/order',
         page: Order,
         isShowHeader: true,
+        isShowFooter: true,
     },
     {
         path: '/my_order',
         page: Myorder,
         isShowHeader: true,
+        isShowFooter: true,
     },
     {
         path: '/payment',
         page: Payment,
+        isShowFooter: true,
         isShowHeader: true,
     },
     {
         path: 'payment/ordersuscess',
         page: OrderSusscess,
         isShowHeader: true,
+        isShowFooter: true,
     },
     {
         path: '/system_admin',
@@ -86,12 +85,14 @@ const routes = [
         page: TypeProductPage,
         isPrivate: true,
         isShowHeader: true,
+        isShowFooter: true,
     },
     {
         path: 'categories/:slug',
         page: CategoryProduct,
         isPrivate: true,
         isShowHeader: true,
+        isShowFooter: true,
     },
     {
         path: '*',

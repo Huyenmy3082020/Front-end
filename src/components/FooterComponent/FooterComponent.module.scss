@@ -1,0 +1,25 @@
+.wrapperList {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+}
+.wrapperItem {
+    display: flex;
+    flex-direction: column;
+}
+.wrapperlink {
+    display: block;
+    margin-bottom: 8px;
+    color: rgb(128, 128, 137);
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+.wrapper {
+    background-color: #fff;
+    margin-top: 40px;
+    padding: 20px;
+}
+.wrapperItem h2 {
+    font-size: 1.4rem;
+    font-weight: 500;
+}

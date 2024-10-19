@@ -24,10 +24,11 @@ import { Col, Row, Spin } from 'antd';
 import NavbarComponent from '../../components/NavbarComponent/NavbarComponent';
 import * as CategorySevice from '../../service/CategoriService';
 import SpinnerComponent from '../../components/Spinner/spinnerComponent';
+import FooterComponent from '../../components/FooterComponent/FooterComponent';
 function HomePage() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [limit, setLimit] = useState(6);
+    const [limit, setLimit] = useState(12);
 
     const [categories, setCategories] = useState([]);
 
@@ -74,12 +75,14 @@ function HomePage() {
         };
 
         fetchData();
-    }, [limit]); // Mỗi khi limit thay đổi, gọi lại API để lấy thêm sản phẩm
+    }, [limit]);
 
     const handleLoadMore = () => {
-        setLimit((prevLimit) => prevLimit + 6); // Tăng limit thêm 6 mỗi lần nhấn
+        setLimit((prevLimit) => prevLimit + 6);
     };
-
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     if (isLoading) {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -286,13 +289,25 @@ function HomePage() {
                                         type={product.type}
                                         discount={product.discount}
                                         selled={product.selled}
+                                        width={width}
                                     />
                                 ))}
+                            </div>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginTop: '16px',
+                                }}
+                            >
+                                <button className={styles.btnXemthem}>Xem them</button>
                             </div>
                         </div>
                     </Col>
                 </Row>
             </div>
+            <FooterComponent></FooterComponent>
         </div>
     );
 }

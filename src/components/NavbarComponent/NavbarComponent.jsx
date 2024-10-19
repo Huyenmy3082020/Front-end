@@ -43,6 +43,7 @@ function NavbarComponent(type, productType) {
                 {categories.map((categorie) => {
                     return (
                         <li
+                            key={categorie.id}
                             className={styles.wrapperItem}
                             onClick={() => {
                                 handleGetTypeProduct(categorie.slug);

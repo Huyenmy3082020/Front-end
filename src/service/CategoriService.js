@@ -28,7 +28,6 @@ export const getCategoryname = async () => {
 export const getCategoryslug = async (slug) => {
     try {
         const res = await axiosInstance.get(`/category/getCategoryByslug/${slug.slug}`);
-        console.log(res);
         return res.data;
     } catch (error) {
         console.error('Error fetching category by slug:', error.response || error.message || error);

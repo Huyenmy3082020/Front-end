@@ -11,8 +11,8 @@ function TypeProductPage() {
     useEffect(() => {
         const fetchProductType = async () => {
             try {
-                const res = await Productservice.getProductType(type); // Gọi hàm với loại sản phẩm từ params
-                setProductType(res.data); // Cập nhật state với dữ liệu nhận được
+                const res = await Productservice.getProductType(type);
+                setProductType(res.data);
             } catch (error) {
                 console.error('Error fetching product type:', error);
             }

@@ -21,10 +21,10 @@ import SliderComponentCustom from '../../../components/SliderProductDetail/Slide
 import { convertPrice } from '../../../ultil';
 import { useDispatch, useSelector } from 'react-redux';
 import { addOrder } from '../../../redux/slides/OrderSlide';
+import FooterComponent from '../../../components/FooterComponent/FooterComponent';
 
 function ProductDetailComponent() {
     const [numProduct, setNumproduct] = useState(1);
-
     const user = useSelector((state) => state.user);
     const { id } = useParams();
     const [products, setProduct] = useState('');
@@ -41,40 +41,45 @@ function ProductDetailComponent() {
 
         fetchProduct();
     }, [id]);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const onchangeInput = (value) => {
         setNumproduct(value);
     };
     const navigate = useNavigate();
     const handleAddOrderProduct = async () => {
-        const orderItem = {
-            name: products?.name,
-            amount: numProduct,
-            image: products?.image,
-            price: products?.price,
-            discount: products?.discount,
-            product: products._id,
-            user: user.id,
-        };
-        console.log(orderItem);
-        try {
-            const cartData = {
+        if (user?.id) {
+            const orderItem = {
+                name: products?.name,
+                amount: numProduct,
+                image: products?.image,
+                price: products?.price,
+                discount: products?.discount,
+                product: products._id,
                 user: user.id,
-                items: [orderItem],
-                totalPrice: orderItem.amount * orderItem.price * (1 - orderItem.discount / 100),
             };
-            dispatch(addOrder({ orderItem }));
-            const result = await Cartservice.creataCart(cartData);
-
-            navigate('/order');
-        } catch (error) {
-            console.error('Failed to create cart:', error.message); // Xử lý lỗi nếu có
+            try {
+                const cartData = {
+                    user: user.id,
+                    items: [orderItem],
+                    totalPrice: orderItem.amount * orderItem.price * (1 - orderItem.discount / 100),
+                };
+                dispatch(addOrder({ orderItem }));
+                const result = await Cartservice.creataCart(cartData);
+                navigate('/order');
+            } catch (error) {
+                console.error('Failed to create cart:', error.message);
+            }
+        } else {
+            navigate('/sign-in');
         }
     };
 
     const handleBuyProduct = () => {};
 
     return (
-        <div style={{ paddingTop: '40px', paddingRight: '30px', paddingLeft: '30px' }}>
+        <div style={{ paddingTop: '40px' }}>
             <div className={styles.wrapper}>
                 <Row>
                     <Col span={9}>
@@ -243,6 +248,7 @@ function ProductDetailComponent() {
                     </Col>
                 </Row>
             </div>
+            <FooterComponent></FooterComponent>
         </div>
     );
 }

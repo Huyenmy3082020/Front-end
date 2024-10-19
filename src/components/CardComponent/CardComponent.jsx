@@ -20,11 +20,13 @@ function CardComponent(props) {
                 handleDetailProduct(id);
             }}
             hoverable
-            headStyle={{ width: '150px', height: '150px' }}
-            style={{
-                width: width || '200px', // Sử dụng width từ props, nếu không có thì mặc định là 200px
+            styles={{
+                header: { width: '150px', height: '150px' },
+                body: { padding: '10px' }, 
             }}
-            bodyStyle={{ padding: '10px' }}
+            style={{
+                width: width || '200px',
+            }}
             cover={<img alt="example" src={image} style={{ position: 'relative' }} />}
         >
             <StyleNameProduct>{name}</StyleNameProduct>
@@ -43,7 +45,7 @@ function CardComponent(props) {
                 style={{
                     display: 'flex',
                     gap: '4px',
-                    borderTop: ' 1px solid rgb(235, 235, 240)',
+                    borderTop: '1px solid rgb(235, 235, 240)',
                     paddingTop: '6px',
                     alignItems: 'center',
                 }}

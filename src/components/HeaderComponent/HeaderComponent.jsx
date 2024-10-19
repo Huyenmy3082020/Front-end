@@ -15,18 +15,32 @@ import {
     WrapperListAccountLink,
     WrapperListAccountTippiLi,
 } from './style';
-import { ShoppingCartOutlined } from '@ant-design/icons';
+import { DiscordOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import * as Userservice from '../../service/Userservice';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/slides/userSlide';
+import { removeAllOrderLogOut } from '../../redux/slides/OrderSlide';
+
 const { Search } = Input;
 
 function HeaderComponent() {
     const user = useSelector((state) => state.user);
+    console.log('userRedux', user);
+
     const order = useSelector((state) => state.order.orderItems);
     const navigate = useNavigate();
     const hanldenavigateOrder = () => {
         navigate('/order');
+    };
+    const dispatch = useDispatch();
+    const Logout = async () => {
+        const res = await Userservice.logoutUser();
+        dispatch(logout());
+        dispatch(removeAllOrderLogOut());
     };
     const renderPreview = () => (
         <div
@@ -55,9 +69,10 @@ function HeaderComponent() {
                     </a>
                 </WrapperListAccountTippiLi>
                 <WrapperListAccountTippiLi>
-                    <a style={{ color: '#27272A', marginLeft: '12px' }} href="/log_out">
+                    <a style={{ color: '#27272A', marginLeft: '12px' }} onClick={Logout} href="/">
                         Đăng xuất
                     </a>
+                    <ToastContainer />
                 </WrapperListAccountTippiLi>
                 <WrapperListAccountTippiLi>
                     <a style={{ color: '#27272A', marginLeft: '12px' }} href="/sign-in">
@@ -86,7 +101,7 @@ function HeaderComponent() {
                 </Col>
                 <Col span={13}>
                     <div>
-                        <Search placeholder="input search text" allowClear enterButton="Search" size="large" />
+                        <Search placeholder="Search" allowClear enterButton="Search" size="large" />
                         <WrapperList>
                             <li>
                                 <WrapperListItem>Điện gia dụng</WrapperListItem>

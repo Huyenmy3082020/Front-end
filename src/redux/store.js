@@ -34,5 +34,5 @@ export const store = configureStore({
         }),
 });
 
-// Tạo persistor
+
 export const persistor = persistStore(store);

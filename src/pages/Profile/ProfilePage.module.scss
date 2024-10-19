@@ -71,3 +71,12 @@
     border: 1px solid rgb(196, 196, 207);
     padding-left: 40px;
 }
+.inputUpdate {
+    width: 200px;
+    border: 1px solid #ddd;
+    height: 25px;
+    border-radius: 4px;
+}
+.inputUpdate :focus-visible {
+    border-color: #fff;
+}

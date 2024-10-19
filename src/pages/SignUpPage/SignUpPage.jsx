@@ -60,9 +60,7 @@ function SignUpPage() {
     };
 
     const handleOnChangeEmail = (value) => {
-        if (value.trim() !== '') {
-            setEmail(value);
-        }
+        setEmail(value);
     };
     const handleOnChangePassword = (value) => {
         setPassword(value);
