@@ -7,12 +7,10 @@ import { convertPrice } from '../../../ultil';
 
 function AllOrder() {
     const [allOrder, setAllOrder] = useState('');
-    console.log(allOrder);
     useEffect(() => {
         const fetchOrders = async () => {
             try {
                 const result = await OrderService.getOrder();
-                console.log(result.data);
 
                 setAllOrder(result.data); // Dữ liệu trả về từ API có thể được truy cập qua result.data
             } catch (error) {

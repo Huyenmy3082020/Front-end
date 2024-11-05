@@ -4,8 +4,6 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 const PayPalButton = () => {
     const handleApprove = async (data, actions) => {
         const order = await actions.order.capture();
-        console.log('Order', order);
-        // Thực hiện các bước xử lý sau khi thanh toán thành công (như thông báo cho server, lưu vào DB, v.v.)
     };
 
     return (

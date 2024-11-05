@@ -32,7 +32,6 @@ const App = () => {
     const [selectedKey, setSelectedKey] = useState('product');
 
     const onClick = (e) => {
-        console.log('click ', e);
         setSelectedKey(e.key);
     };
 

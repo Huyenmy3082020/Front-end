@@ -33,7 +33,6 @@ export const refreshToken = async () => {
             {},
             { withCredentials: true },
         );
-        console.log('New access token:', res.data);
         return res.data;
     } catch (error) {
         console.error('Error in refreshToken:', error);
@@ -43,8 +42,6 @@ export const refreshToken = async () => {
 
 export const UpdateUser = async (id, data, access_token) => {
     try {
-        console.log(data);
-
         const res = await axiosJWT.put(`${process.env.REACT_APP_API_URL}/api/user/update-user/${id}`, data, {
             headers: {
                 authorization: `Bearer ${access_token}`,

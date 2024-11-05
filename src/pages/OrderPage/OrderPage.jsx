@@ -21,9 +21,6 @@ function OrderPage() {
     const [orders, setOrder] = useState([]);
     const dispatch = useDispatch();
 
-    console.log('orders', orders);
-    console.log('orderItems', orderItems);
-
     useEffect(() => {
         const featchOrderItems = async () => {
             try {
@@ -53,8 +50,6 @@ function OrderPage() {
 
     const handleOnclickIncrease = async (productId, altam) => {
         try {
-            console.log('productId', productId);
-
             const data = { userId, productId, altam };
             await Cartservice.AlterAmount(data);
             const updatedCart = await Cartservice.getCartUser(userId);
@@ -94,7 +89,6 @@ function OrderPage() {
             }, 0);
         return result;
     }, [orders?.items, listCheck]);
-    console.log(priceMemo);
 
     const priceDisCountMemo = useMemo(() => {
         const result = orderItems

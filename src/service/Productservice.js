@@ -5,12 +5,10 @@ const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
 });
 
-export const getAllProduct = async (search, limit) => {
+export const getAllProduct = async (limit) => {
     let url = '/product/getAllProduct';
-    if (search && search.length > 0) {
-        url += `?filter=name&filter=${search}`; // Tìm kiếm sản phẩm theo tên
-        return;
-    } else if (limit) {
+
+    if (limit) {
         // Nếu không có từ khóa tìm kiếm thì dùng giới hạn sản phẩm
         url += `?limit=${limit}`;
     }
@@ -24,6 +22,15 @@ export const getAllProduct = async (search, limit) => {
     }
 };
 
+export const getAllProduct1 = async (search) => {
+    try {
+        const res = await axiosInstance.get(`/product/getAllProduct?filter=name&filter=${search}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching trashed products:', error);
+        throw error;
+    }
+};
 export const getAllProductTrash = async () => {
     try {
         const res = await axiosInstance.get(`/product/getAllProductTrash`);
@@ -35,7 +42,6 @@ export const getAllProductTrash = async () => {
 };
 
 export const createProduct = async (data) => {
-    console.log(data);
 
     const res = await axiosInstance.post(`/product/create`, data);
     return res.data;

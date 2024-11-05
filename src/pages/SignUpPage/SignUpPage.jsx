@@ -70,9 +70,6 @@ function SignUpPage() {
         setConfirmPassword(value);
     };
 
-    console.log(password);
-    console.log(confirmPassword);
-    console.log({ email, password, confirmPassword });
     return (
         <div
             style={{

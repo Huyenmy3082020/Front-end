@@ -10,7 +10,6 @@ function CategoryProduct() {
     const slug = useParams();
     const [categoryProduct, setCategoryProduct] = useState([]);
     const [categoryProduct1, setCategoryProduct1] = useState([]);
-    console.log('categoryProduct', categoryProduct1);
     useEffect(() => {
         const fetchCategories = async () => {
             try {

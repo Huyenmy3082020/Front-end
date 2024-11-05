@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 export const convertPrice = (amount) => {
     if (typeof amount !== 'number' || isNaN(amount)) {
         return 'N/A'; // Trả về 'N/A' nếu giá trị không hợp lệ
@@ -28,3 +30,23 @@ export const getBase64 = (file) =>
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
     });
+// hooks/useDebounce.js
+
+const useDebounce = (value, delay) => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+
+        // Cleanup function
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value, delay]);
+
+    return debouncedValue;
+};
+
+export default useDebounce;

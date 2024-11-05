@@ -1,0 +1,10 @@
+.wrapperList {
+}
+.warpperItem {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.warpperItem:hover {
+    background-color: rgba(39, 39, 42, 0.12);
+}

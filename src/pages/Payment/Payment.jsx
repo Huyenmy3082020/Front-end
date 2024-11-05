@@ -58,13 +58,11 @@ function Payment() {
 
     const handleChange = (e) => {
         setSelectedPaymentMethod(e.target.value);
-        console.log('Selected payment method:', e.target.value); // Thêm log để kiểm tra
     };
     const { payment } = PaymentMethod();
     const selectedPaymentDescription = payment[selectedPaymentMethod];
 
     const mutationAddOrder = useMutationHooks((data) => Orderservice.createOrder(data));
-    console.log(mutationAddOrder);
     const totalPrice = location.state.totalPrice + shippingFee;
     const handleAddOrder = () => {
         mutationAddOrder.mutate(
@@ -82,11 +80,8 @@ function Payment() {
             },
             {
                 onSuccess: () => {
-                    // Kiểm tra phản hồi từ API
-                    console.log('mutationAddOrder', mutationAddOrder);
 
                     if (mutationAddOrder.data && mutationAddOrder.data === 'undefined') {
-                        // Nếu có thông tin chi tiết về sản phẩm không đủ số lượng, hiển thị nó
                         if (mutationAddOrder.data.deta && mutationAddOrder.data.details.length > 0) {
                             const messages = mutationAddOrder.data.details.map(
                                 (item) =>

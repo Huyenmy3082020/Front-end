@@ -54,19 +54,20 @@ function SignInPage() {
             {
                 onSuccess: (data) => {
                     setIsLoading(false);
-                    handleHome();
-
-                    localStorage.setItem('access_token', data?.accessToken);
-
-                    try {
+                    if (data?.accessToken) {
+                        console.log(data);
+                        localStorage.setItem('access_token', data?.accessToken);
                         const decode = jwtDecode(data?.accessToken);
                         handleGetDetailUser(decode?.id, data?.accessToken);
-                    } catch (decodeError) {
-                        setErrorMessage('Failed to decode the token.');
+                        handleHome();
+                    } else {
+                        setErrorMessage('Login failed. No access token received.');
                     }
                 },
                 onError: (error) => {
                     setIsLoading(false);
+                    console.log('error', error);
+
                     if (error.response && error.response.data) {
                         setErrorMessage(error.response.data.message);
                     } else {

@@ -92,13 +92,8 @@ function AdminProduct() {
         };
 
         try {
-            // Gọi API để tạo sản phẩm
             const res = await Productservice.createProduct(productData);
-
-            console.log('Product created successfully:', res);
-        } catch (error) {
-            console.error('Error creating product:', error);
-        }
+        } catch (error) {}
     };
 
     return (

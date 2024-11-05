@@ -41,7 +41,6 @@ export const OrderSlide = createSlice({
 
         increaseOrder: (state, action) => {
             const { productId } = action.payload;
-            console.log(productId);
 
             const itemOrder = state.orderItems.find((item) => item.product === productId);
 

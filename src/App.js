@@ -30,7 +30,6 @@ const App = () => {
             if (error.response?.status === 401) {
                 console.error('Token expired. Trying to refresh...');
                 const newToken = await refreshAccessToken();
-                console.log(newToken);
                 if (newToken) {
                     return handleGetDetailUser(id, newToken);
                 }
@@ -73,7 +72,6 @@ const App = () => {
 
                 if (decode?.exp < currentTime) {
                     const newToken = await refreshAccessToken();
-                    console.log('newToken', newToken);
                     if (newToken) {
                         config.headers['authorization'] = `Bearer ${newToken}`;
                     } else {

@@ -24,7 +24,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/slides/userSlide';
 import { removeAllOrderLogOut } from '../../redux/slides/OrderSlide';
 import { searchProduct } from '../../redux/slides/ProductSlide';
-
+import Tippy from '@tippyjs/react/headless';
+import SearchComponent from './SearchComponent/Search';
 function HeaderComponent() {
     const user = useSelector((state) => state.user);
 
@@ -85,10 +86,9 @@ function HeaderComponent() {
     const handleChange = (e) => {
         const value = e.target.value;
         setSearch(value);
-
-        if (value.trim() !== '') {
-            dispatch(searchProduct(value));
-        }
+    };
+    const renderPreviewSearch = () => {
+        <div>dassfsaddss</div>;
     };
     return (
         <div>
@@ -107,22 +107,43 @@ function HeaderComponent() {
                     </WrapperTextHeader>
                 </Col>
                 <Col span={13}>
-                    <div className={styles.wrapperSearch}>
-                        <img
-                            src="https://salt.tikicdn.com/ts/upload/33/d0/37/6fef2e788f00a16dc7d5a1dfc5d0e97a.png"
-                            style={{ width: '20px', height: '20px', margin: '0px 0px 0px 18px' }}
-                            alt=""
-                        />
-                        <input
-                            type="text"
-                            name=""
-                            id=""
-                            onChange={handleChange}
-                            placeholder="Tim kiem"
-                            className={styles.SearchInput}
-                        />
-                        <button className={styles.btnSeacrch}>Tìm kiếm</button>
-                    </div>
+                    <Tippy
+                        interactive={true}
+                        delay={[200, 0]}
+                        offset={[-20, 0]}
+                        visible={searchs.length > 0}
+                        placement="bottom"
+                        render={(attrs) => (
+                            <div
+                                {...attrs}
+                                style={{
+                                    backgroundColor: 'white',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '4px',
+                                    marginLeft: '33px',
+                                    width: '674px',
+                                }}
+                            >
+                                <SearchComponent search={searchs}></SearchComponent>
+                            </div>
+                        )}
+                        style={{ padding: '0 0px' }}
+                    >
+                        <div className={styles.wrapperSearch}>
+                            <img
+                                src="https://salt.tikicdn.com/ts/upload/33/d0/37/6fef2e788f00a16dc7d5a1dfc5d0e97a.png"
+                                style={{ width: '20px', height: '20px', margin: '0px 0px 0px 18px' }}
+                                alt="Tìm kiếm"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Tìm kiếm"
+                                className={styles.SearchInput}
+                                onChange={handleChange}
+                            />
+                            <button className={styles.btnSeacrch}>Tìm kiếm</button>
+                        </div>
+                    </Tippy>
                 </Col>
                 <Col span={7} style={{ display: 'flex', gap: '20px', marginBottom: '15px' }}>
                     <WrapperHeaderAccount>

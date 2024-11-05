@@ -8,7 +8,6 @@ const axiosInstance = axios.create({
 export const creataCart = async (data) => {
     try {
         const res = await axiosInstance.post(`/cart/createCart`, data);
-        console.log(res);
         return res.data;
     } catch (error) {
         console.error('Error fetching category by slug:', error.response || error.message || error);
@@ -35,7 +34,6 @@ export const AlterAmount = async (data) => {
 };
 export const deleteCartById = async (data) => {
     try {
-        console.log(data);
         const res = await axiosInstance.delete(`${process.env.REACT_APP_API_URL}/cart/delete`, {
             data,
         });
