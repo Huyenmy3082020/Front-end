@@ -73,7 +73,7 @@ function ProductDetailComponent() {
                 console.error('Failed to create cart:', error.message);
             }
         } else {
-            navigate('/sign-in');
+            // navigate('/sign-in');
         }
     };
 

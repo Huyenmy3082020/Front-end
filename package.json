@@ -62,5 +62,5 @@
         "sass": "^1.79.4",
         "webpack-dev-server": "^5.1.0"
     },
-    "proxy ": "https://alo-4.onrender.com"
+    "proxy ": "https://alo-8.onrender.com"
 }
