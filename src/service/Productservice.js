@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Tạo instance của axios với URL từ biến môi trường
 const axiosInstance = axios.create({
-    baseURL: 'https://alo-8.onrender.com',
+    baseURL: process.env.REACT_APP_API_URL,
 });
 
 export const getAllProduct = async (limit) => {
