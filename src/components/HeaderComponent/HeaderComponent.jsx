@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Badge, Col, Input } from 'antd';
 
 import {
@@ -7,29 +7,26 @@ import {
     WrapperHeaderAccount,
     StyledTippy,
     WrapperTextIcon,
-    WrapperList,
-    WrapperListItem,
     WrapperListAccount,
     WrapperListAccountIcon,
     WrapperListAccountAdd,
     WrapperListAccountLink,
     WrapperListAccountTippiLi,
 } from './style';
-import { DiscordOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import styles from '../.././components/HeaderComponent/HeaderComponent.module.scss';
 import { useNavigate } from 'react-router-dom';
 import * as Userservice from '../../service/Userservice';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/slides/userSlide';
 import { removeAllOrderLogOut } from '../../redux/slides/OrderSlide';
-
-const { Search } = Input;
+import { searchProduct } from '../../redux/slides/ProductSlide';
 
 function HeaderComponent() {
     const user = useSelector((state) => state.user);
-    console.log('userRedux', user);
 
     const order = useSelector((state) => state.order.orderItems);
     const navigate = useNavigate();
@@ -37,6 +34,7 @@ function HeaderComponent() {
         navigate('/order');
     };
     const dispatch = useDispatch();
+
     const Logout = async () => {
         const res = await Userservice.logoutUser();
         dispatch(logout());
@@ -83,6 +81,15 @@ function HeaderComponent() {
         </div>
     );
 
+    const [searchs, setSearch] = useState('');
+    const handleChange = (e) => {
+        const value = e.target.value;
+        setSearch(value);
+
+        if (value.trim() !== '') {
+            dispatch(searchProduct(value));
+        }
+    };
     return (
         <div>
             <WrapperHeader>
@@ -100,13 +107,21 @@ function HeaderComponent() {
                     </WrapperTextHeader>
                 </Col>
                 <Col span={13}>
-                    <div>
-                        <Search placeholder="Search" allowClear enterButton="Search" size="large" />
-                        <WrapperList>
-                            <li>
-                                <WrapperListItem>Điện gia dụng</WrapperListItem>
-                            </li>
-                        </WrapperList>
+                    <div className={styles.wrapperSearch}>
+                        <img
+                            src="https://salt.tikicdn.com/ts/upload/33/d0/37/6fef2e788f00a16dc7d5a1dfc5d0e97a.png"
+                            style={{ width: '20px', height: '20px', margin: '0px 0px 0px 18px' }}
+                            alt=""
+                        />
+                        <input
+                            type="text"
+                            name=""
+                            id=""
+                            onChange={handleChange}
+                            placeholder="Tim kiem"
+                            className={styles.SearchInput}
+                        />
+                        <button className={styles.btnSeacrch}>Tìm kiếm</button>
                     </div>
                 </Col>
                 <Col span={7} style={{ display: 'flex', gap: '20px', marginBottom: '15px' }}>
@@ -126,8 +141,13 @@ function HeaderComponent() {
                                     style={{ padding: '0 0px' }}
                                 >
                                     <div style={{ alignItems: 'center', display: 'flex' }}>
-                                        <WrapperListAccountIcon src="https://salt.tikicdn.com/ts/upload/07/d5/94/d7b6a3bd7d57d37ef6e437aa0de4821b.png"></WrapperListAccountIcon>
-
+                                        <WrapperListAccountIcon
+                                            src={
+                                                user.avatar ||
+                                                'https://salt.tikicdn.com/ts/upload/07/d5/94/d7b6a3bd7d57d37ef6e437aa0de4821b.png'
+                                            }
+                                            alt="User Avatar"
+                                        />
                                         <WrapperListAccountLink>Tài khoản</WrapperListAccountLink>
                                     </div>
                                 </StyledTippy>

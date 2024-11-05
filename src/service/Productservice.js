@@ -5,9 +5,13 @@ const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
 });
 
-export const getAllProduct = async (limit) => {
+export const getAllProduct = async (search, limit) => {
     let url = '/product/getAllProduct';
-    if (limit) {
+    if (search && search.length > 0) {
+        url += `?filter=name&filter=${search}`; // Tìm kiếm sản phẩm theo tên
+        return;
+    } else if (limit) {
+        // Nếu không có từ khóa tìm kiếm thì dùng giới hạn sản phẩm
         url += `?limit=${limit}`;
     }
 
@@ -98,4 +102,9 @@ export const getProductType = async (type) => {
         console.error('Error fetching product type:', error);
         throw error;
     }
+};
+
+export const search = async (data) => {
+    const res = await axiosInstance.get(`/product/search`, data);
+    return res.data;
 };

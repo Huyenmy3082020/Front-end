@@ -1,0 +1,56 @@
+.inputSearch {
+    width: 500px;
+    height: 40px;
+    border: 1px solid #ddd;
+}
+.wrapperSearch {
+    width: 100%;
+    display: flex;
+    position: relative;
+    border: 1px solid rgb(221, 221, 227);
+    border-radius: 8px;
+    -webkit-box-align: center;
+    align-items: center;
+}
+.SearchInput {
+    border: 0px;
+    padding: 0px 8px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 150%;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    flex: 1 1 0%;
+    outline: none;
+}
+.btnSeacrch {
+    border: 0px;
+    width: 92px;
+    height: 38px;
+    padding: 4px;
+    border-radius: 0px 8px 8px 0px;
+    background: transparent;
+    color: rgb(10, 104, 255);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 150%;
+    outline: none;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+}
+.btnSeacrch:hover {
+    background-color: rgba(10, 104, 255, 0.2);
+}
+.btnSeacrch::after {
+    content: '';
+    position: absolute;
+    width: 1px;
+    left: 0;
+    height: 23px;
+    background-color: #ddd;
+}

@@ -1,10 +1,3 @@
-export const getBase64 = (file) =>
-    new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-    });
 export const convertPrice = (amount) => {
     if (typeof amount !== 'number' || isNaN(amount)) {
         return 'N/A'; // Trả về 'N/A' nếu giá trị không hợp lệ
@@ -27,3 +20,11 @@ export const PaymentMethod = () => {
         },
     };
 };
+
+export const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });

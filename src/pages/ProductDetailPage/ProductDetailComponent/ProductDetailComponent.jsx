@@ -67,6 +67,7 @@ function ProductDetailComponent() {
                 };
                 dispatch(addOrder({ orderItem }));
                 const result = await Cartservice.creataCart(cartData);
+
                 navigate('/order');
             } catch (error) {
                 console.error('Failed to create cart:', error.message);
@@ -94,6 +95,9 @@ function ProductDetailComponent() {
                                         justifyContent: 'space-between',
                                     }}
                                 >
+                                    <a href="" className={styles.wrapperImgLink}>
+                                        <img src={products.image} className={styles.wrapperImgSmall} alt="" />
+                                    </a>
                                     <a href="" className={styles.wrapperImgLink}>
                                         <img src={products.image} className={styles.wrapperImgSmall} alt="" />
                                     </a>

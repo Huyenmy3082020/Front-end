@@ -40,10 +40,10 @@ function NavbarComponent(type, productType) {
                 Danh mục
             </p>
             <ul className={styles.wrapperList}>
-                {categories.map((categorie) => {
+                {categories.map((categorie, index) => {
                     return (
                         <li
-                            key={categorie.id}
+                            key={index}
                             className={styles.wrapperItem}
                             onClick={() => {
                                 handleGetTypeProduct(categorie.slug);

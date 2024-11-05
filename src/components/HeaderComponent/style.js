@@ -1,10 +1,9 @@
 import { Row } from 'antd';
 import styled from 'styled-components';
 import Tippy from '@tippyjs/react'; // Import Tippy từ @tippyjs/react
-import 'tippy.js/dist/tippy.css'; // Import CSS của Tippy.js
 
 export const WrapperHeader = styled(Row)`
-    padding: 10px 60px;
+    padding: 10px;
     background-color: #fff;
     z-index: 999;
     align-items: center;
@@ -15,7 +14,8 @@ export const WrapperHeader = styled(Row)`
 export const WrapperTextHeader = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    padding-left: 10px;
 `;
 
 export const WrapperHeaderAccount = styled.div`

@@ -3,11 +3,9 @@ import styles from '../../pages/Profile/ProfilePage.module.scss';
 import { useSelector } from 'react-redux';
 import * as UserService from '../../service/Userservice';
 import { useMutationHooks } from '../../hooks/useMutationHook';
-import { Avatar, Button, Col, Radio, Row, Select, Input } from 'antd';
-import icondienthoai from '../../assets/icondienthoai.png';
-import email from '../../assets/email (1).png';
+import { Button, Col, Radio, Row, Select, Input, message } from 'antd';
 import NavbarProfile from '../../components/NavbarProfile/NavbarProfile.jsx';
-
+import { toast } from 'react-toastify';
 function ProfilePage() {
     const user = useSelector((state) => state.user);
     const [email, setEmail] = useState('');
@@ -15,11 +13,7 @@ function ProfilePage() {
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [avatar, setAvatar] = useState('');
-
-    const mutation = useMutationHooks((data) => {
-        const { id, access_token, ...rest } = data;
-        UserService.UpdateUser(id, rest, access_token);
-    });
+    const [date, setDate] = useState('');
 
     const handleOnChangeName = (value) => {
         setName(value);
@@ -37,18 +31,9 @@ function ProfilePage() {
         setEmail(value);
     };
 
-    const countries = [
-        'Vietnam',
-        'United States',
-        'Canada',
-        'France',
-        'Germany',
-        'Japan',
-        'Australia',
-        'China',
-        'India',
-        'Brazil',
-    ];
+    const handleOnChangeDate = (value) => {
+        setDate(value);
+    };
 
     useEffect(() => {
         if (user) {
@@ -59,13 +44,41 @@ function ProfilePage() {
             setAddress(user.address || '');
         }
     }, [user]);
-
-    const handleClickUpdatePhone = () => {};
-
-    const handleClickUpdateEmail = () => {};
-
-    const handleClickUpdatePassword = () => {};
-
+    const [gender, setGender] = useState(null);
+    const mutation = useMutationHooks((data) => {
+        const { id, access_token, ...rest } = data;
+        UserService.UpdateUser(id, rest, access_token);
+    });
+    const handleClickUpdate = () => {
+        mutation.mutate({
+            name: name,
+            id: user.id,
+            email: email,
+            phone: phone,
+            avatar: avatar,
+            address: address,
+            date: date,
+            access_token: user.access_token,
+            gender: gender,
+        });
+        message.success('Cập nhật thông tin thành công!');
+    };
+    const handleGenderChange = (e) => {
+        setGender(e.target.value);
+    };
+    const handleOnchangeAvatar = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setAvatar(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    const handleClickDiv = () => {
+        document.getElementById('avatarInput').click();
+    };
     return (
         <div style={{ backgroundColor: '#f5f5f5' }}>
             <Row>
@@ -81,25 +94,55 @@ function ProfilePage() {
                             paddingBottom: '57px',
                             marginTop: '16px',
                             padding: '16px ',
+                            height: '436px',
                         }}
                     >
                         <div className={styles.wrapperList}>
                             <span>Thông tin cá nhân</span>
                             <div className={styles.wrapperItem}>
-                                <div className={styles.avatar}>
-                                    <div>
-                                        <img
-                                            src="https://frontend.tikicdn.com/_desktop-next/static/img/account/avatar.png"
-                                            alt=""
-                                            width="50px"
-                                            height="50px"
-                                        />
+                                <div onChange={handleOnchangeAvatar}>
+                                    <div className={styles.avatar} onClick={handleClickDiv}>
+                                        {user?.avatar ? (
+                                            <div>
+                                                <img
+                                                    src={avatar}
+                                                    alt=""
+                                                    style={{
+                                                        width: ' 100px',
+                                                        height: '100px',
+                                                        borderRadius: '50%',
+                                                    }}
+                                                />
+                                                <input
+                                                    type="file"
+                                                    id="avatarInput"
+                                                    style={{ display: 'none' }}
+                                                    onChange={handleOnchangeAvatar}
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <img
+                                                    src="https://frontend.tikicdn.com/_desktop-next/static/img/account/avatar.png"
+                                                    alt=""
+                                                    width="50px"
+                                                    height="50px"
+                                                />
+                                                <input
+                                                    type="file"
+                                                    id="avatarInput"
+                                                    style={{ display: 'none' }}
+                                                    onChange={handleOnchangeAvatar}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <div>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <span className={styles.wrapperName}>Họ và tên</span>
                                         <input
+                                            placeholder="Nhập họ và tên"
                                             className={styles.wrapperInput}
                                             value={name}
                                             onChange={(e) => handleOnChangeName(e.target.value)}
@@ -109,6 +152,7 @@ function ProfilePage() {
                                     <div style={{ display: 'flex', alignItems: 'center', paddingTop: '20px' }}>
                                         <span className={styles.wrapperName}>Địa chỉ</span>
                                         <input
+                                            placeholder="Nhập địa chỉ"
                                             className={styles.wrapperInput}
                                             value={address}
                                             onChange={(e) => handleOnChangeAddress(e.target.value)}
@@ -120,48 +164,40 @@ function ProfilePage() {
                                 <div>Ngày sinh</div>
                                 <div className={styles.wrapperRight}>
                                     <input
+                                        type="date"
+                                        value={date}
+                                        onChange={(e) => {
+                                            handleOnChangeDate(e.target.value);
+                                        }}
                                         className={styles.wrapperInput}
-                                        style={{ width: '100px', marginRight: '20px' }}
+                                        style={{ width: '200px', marginRight: '20px' }}
                                     />
-                                    <input
-                                        className={styles.wrapperInput}
-                                        style={{ width: '100px', marginRight: '20px' }}
-                                    />
-                                    <input className={styles.wrapperInput} style={{ width: '80px' }} />
                                 </div>
                             </div>
                             <div className={styles.wrapperItem}>
                                 <div>Giới tính</div>
                                 <div style={{ display: 'flex' }}>
-                                    <div style={{ marginLeft: '8px' }}>
-                                        <Radio></Radio>
-                                        Nam
-                                    </div>
-                                    <div style={{ marginLeft: '8px' }}>
-                                        <Radio></Radio>
-                                        Nữ
-                                    </div>
-                                    <div style={{ marginLeft: '8px' }}>
-                                        <Radio></Radio>
-                                        Khác
-                                    </div>
+                                    <Radio.Group onChange={handleGenderChange} value={gender}>
+                                        <div style={{ display: 'flex' }}>
+                                            <div style={{ marginLeft: '8px' }}>
+                                                <Radio value="nam">Nam</Radio>
+                                            </div>
+                                            <div style={{ marginLeft: '8px' }}>
+                                                <Radio value="nu">Nữ</Radio>
+                                            </div>
+                                            <div style={{ marginLeft: '8px' }}>
+                                                <Radio value="khac">Khác</Radio>
+                                            </div>
+                                        </div>
+                                    </Radio.Group>
                                 </div>
                             </div>
-                            <div className={styles.wrapperItem}>
-                                <div>Chọn quốc tịch</div>
-                                <Select style={{ width: 200 }} placeholder="Chọn quốc gia">
-                                    {countries.map((country) => (
-                                        <Select.Option key={country} value={country}>
-                                            {country}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                            </div>
                         </div>
-
-                        <Button type="primary" style={{ marginTop: '20px' }}>
-                            Lưu thay đổi
-                        </Button>
+                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+                            <Button type="primary" style={{ marginTop: '20px' }} onClick={handleClickUpdate}>
+                                Lưu thay đổi
+                            </Button>
+                        </div>
                     </div>
                 </Col>
                 <Col span={9}>
@@ -189,11 +225,14 @@ function ProfilePage() {
                                         />
                                         <input
                                             type="text"
+                                            onChange={(e) => {
+                                                handleOnChangePhone(e.target.value);
+                                            }}
                                             className={styles.inputUpdate}
                                             placeholder="Nhập số diện thoại "
                                         />
                                     </div>
-                                    <button className={styles.btnCapNhat} onClick={handleClickUpdatePhone}>
+                                    <button className={styles.btnCapNhat} onClick={handleClickUpdate}>
                                         Cập nhật
                                     </button>
                                 </div>
@@ -206,9 +245,16 @@ function ProfilePage() {
                                             alt=""
                                             style={{ marginRight: '10px' }}
                                         />
-                                        <input type="text" className={styles.inputUpdate} placeholder="Nhập email " />
+                                        <input
+                                            type="text"
+                                            className={styles.inputUpdate}
+                                            placeholder="Nhập email"
+                                            onChange={(e) => {
+                                                handleOnChangeEmail(e.target.value);
+                                            }}
+                                        />
                                     </div>
-                                    <button className={styles.btnCapNhat} onClick={handleClickUpdateEmail}>
+                                    <button className={styles.btnCapNhat} onClick={handleClickUpdate}>
                                         Cập nhật
                                     </button>
                                 </div>
@@ -253,11 +299,6 @@ function ProfilePage() {
                                             height="24px"
                                             alt=""
                                             style={{ marginRight: '10px' }}
-                                        />
-                                        <input
-                                            type="text"
-                                            className={styles.inputUpdate}
-                                            placeholder="Yêu cầu xóa tài khoản"
                                         />
                                     </div>
                                     <button className={styles.btnCapNhat}>Yêu cầu</button>

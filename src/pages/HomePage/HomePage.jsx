@@ -25,10 +25,13 @@ import NavbarComponent from '../../components/NavbarComponent/NavbarComponent';
 import * as CategorySevice from '../../service/CategoriService';
 import SpinnerComponent from '../../components/Spinner/spinnerComponent';
 import FooterComponent from '../../components/FooterComponent/FooterComponent';
+import { useSelector } from 'react-redux';
 function HomePage() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [limit, setLimit] = useState(12);
+
+    const [productSeatch, setProductSearch] = useState('');
 
     const [categories, setCategories] = useState([]);
 
@@ -90,6 +93,7 @@ function HomePage() {
             </div>
         ); // Hiển thị thông báo tải
     }
+
     const width = '150px';
     return (
         <div className={styles.wrapper}>

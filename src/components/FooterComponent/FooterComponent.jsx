@@ -1,7 +1,6 @@
 import { Col, Row } from 'antd';
 import styles from '../../components/FooterComponent/FooterComponent.module.scss';
 import now from '../../assets/now.png';
-import thanhtoanbangtienmat from '../../assets/thanhtoanbangtienmat.png';
 import thetindung from '../../assets/thetindung.png';
 import viettelmoney from '../../assets/viettelmoney.png';
 import vnpay from '../../assets/vnpay.png';

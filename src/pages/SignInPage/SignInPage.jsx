@@ -55,7 +55,6 @@ function SignInPage() {
                 onSuccess: (data) => {
                     setIsLoading(false);
                     handleHome();
-                    console.log('data', data);
 
                     localStorage.setItem('access_token', data?.accessToken);
 
@@ -152,14 +151,12 @@ function SignInPage() {
                         </div>
                     </div>
 
-                    {/* Hiển thị thông báo lỗi nếu có */}
                     {errorMessage && (
                         <div style={{ color: 'red', fontSize: '16px', textAlign: 'center', margin: '10px 0' }}>
                             {errorMessage}
                         </div>
                     )}
 
-                    {/* Hiển thị spinner khi đang loading */}
                     <SpinnerComponent isLoading={isLoading}>
                         <ButtonComponent
                             onClick={handleSignIn}
