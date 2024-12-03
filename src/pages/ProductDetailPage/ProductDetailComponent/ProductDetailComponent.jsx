@@ -22,6 +22,7 @@ import { convertPrice } from '../../../ultil';
 import { useDispatch, useSelector } from 'react-redux';
 import { addOrder } from '../../../redux/slides/OrderSlide';
 import FooterComponent from '../../../components/FooterComponent/FooterComponent';
+import { addItem, setCartId } from '../../../redux/slides/CartSlide';
 
 function ProductDetailComponent() {
     const [numProduct, setNumproduct] = useState(1);
@@ -29,6 +30,7 @@ function ProductDetailComponent() {
     const { id } = useParams();
     const [products, setProduct] = useState('');
     const dispatch = useDispatch();
+    const [cart, setCart] = useState([]);
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -48,27 +50,28 @@ function ProductDetailComponent() {
         setNumproduct(value);
     };
     const navigate = useNavigate();
+    const access_token = localStorage.getItem('access_token');
+
     const handleAddOrderProduct = async () => {
         if (user?.id) {
-            const orderItem = {
-                name: products?.name,
-                amount: numProduct,
-                image: products?.image,
-                price: products?.price,
-                discount: products?.discount,
-                product: products._id,
-                user: user.id,
+            const itemss = {
+                quantity: numProduct,
+                productId: products._id,
             };
+
             try {
                 const cartData = {
-                    user: user.id,
-                    items: [orderItem],
-                    totalPrice: orderItem.amount * orderItem.price * (1 - orderItem.discount / 100),
+                    userId: user.id,
+                    items: [itemss],
                 };
-                dispatch(addOrder({ orderItem }));
-                const result = await Cartservice.creataCart(cartData);
 
-                navigate('/order');
+                const result = await Cartservice.creataCart({ cartData, access_token: access_token });
+
+                // Sau khi tạo giỏ hàng mới, dispatch để lưu cartId vào Redux
+                dispatch(setCartId(result.data.cartId));
+
+                // Gọi API để lấy lại thông tin giỏ hàng và cập nhật Redux
+                await fetchCartData(user.id); // Gọi hàm fetchCartData sau khi giỏ hàng được tạo
             } catch (error) {
                 console.error('Failed to create cart:', error.message);
             }
@@ -78,6 +81,33 @@ function ProductDetailComponent() {
     };
 
     const handleBuyProduct = () => {};
+    const fetchCartData = async (userId) => {
+        try {
+            const response = await Cartservice.getAllProductByCart(userId);
+            console.log(response);
+
+            // Lưu dữ liệu giỏ hàng vào state (nếu cần) và dispatch vào Redux
+
+            response.items.forEach((item) => {
+                dispatch(
+                    addItem({
+                        productId: item.productId,
+                        quantity: item.quantity,
+                        productDetails: item.productDetails,
+                    }),
+                );
+            });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    // Bạn có thể gọi fetchCartData trong useEffect khi component mount nếu cần
+    useEffect(() => {
+        if (user?.id) {
+            fetchCartData(user.id); // Lấy dữ liệu giỏ hàng khi component load
+        }
+    }, [user?.id]); // Gọi lại mỗi khi user.id thay đổi
 
     return (
         <div style={{ paddingTop: '40px' }}>

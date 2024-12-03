@@ -23,13 +23,11 @@ import * as Productservice from '../../service/Productservice';
 import { Col, Row, Spin } from 'antd';
 import NavbarComponent from '../../components/NavbarComponent/NavbarComponent';
 import * as CategorySevice from '../../service/CategoriService';
-import SpinnerComponent from '../../components/Spinner/spinnerComponent';
 import FooterComponent from '../../components/FooterComponent/FooterComponent';
-import { useSelector } from 'react-redux';
 function HomePage() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [limit, setLimit] = useState(12);
+    const [limit, setLimit] = useState(48);
 
     const [productSeatch, setProductSearch] = useState('');
 

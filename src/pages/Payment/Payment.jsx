@@ -28,18 +28,12 @@ function Payment() {
     const user = useSelector((state) => state.user);
     const location = useLocation();
 
+    console.log(location);
     const [selectedShipping, setSelectedShipping] = useState('giaosieutoc');
     const [idProduct, setIdProduct] = useState([]);
     const navigate = useNavigate();
 
-    const products = location.state.orderItems;
-
-    useEffect(() => {
-        const ids = products.map((product) => product.product);
-        setIdProduct(ids);
-    }, [products]);
-
-    const [shippingFee, setShippingFee] = useState(25000); // Phí giao siêu tốc mặc định
+    const [shippingFee, setShippingFee] = useState(25000);
 
     const handleShippingChange = (e) => {
         const { value } = e.target;
@@ -62,51 +56,48 @@ function Payment() {
     const { payment } = PaymentMethod();
     const selectedPaymentDescription = payment[selectedPaymentMethod];
 
-    const mutationAddOrder = useMutationHooks((data) => Orderservice.createOrder(data));
     const totalPrice = location.state.totalPrice + shippingFee;
-    const handleAddOrder = () => {
-        mutationAddOrder.mutate(
-            {
-                orderItems: location.state.orderItems,
-                payment: selectedPaymentDescription,
-                itemPrices: location.state.itemPrices,
-                city: user?.city,
-                phone: user?.phone,
-                name: user?.name,
-                shippingPrice: shippingFee,
-                address: user?.address,
-                totalPrice: totalPrice,
-                user: user?.id,
-            },
-            {
-                onSuccess: () => {
 
-                    if (mutationAddOrder.data && mutationAddOrder.data === 'undefined') {
-                        if (mutationAddOrder.data.deta && mutationAddOrder.data.details.length > 0) {
-                            const messages = mutationAddOrder.data.details.map(
-                                (item) =>
-                                    `Sản phẩm với ID ${item.productId} không đủ số lượng tồn kho hoặc không tồn tại.`,
-                            );
-                            message.error(messages.join(' '));
-                        } else {
-                            message.error('Sản phẩm trong kho đã hết ! Vui lòng quay lại sau');
-                        }
+    const handleAddOrder = async () => {
+        if (user.address) {
+            try {
+                const orderData = {
+                    orderItems: location.state.cartItems,
+                    payment: selectedPaymentDescription,
+                    shippingPrice: shippingFee,
+                    totalPrice: totalPrice,
+                    user: user?.id,
+                };
+                const response = await Orderservice.createOrder(orderData);
+
+                if (response && response.status === 'error') {
+                    if (response.details && response.details.length > 0) {
+                        const messages = response.details.map(
+                            (item) => `Sản phẩm với ID ${item.productId} không đủ số lượng tồn kho hoặc không tồn tại.`,
+                        );
+                        message.error(messages.join(' '));
                     } else {
-                        dispatch(removeAllOrder({ listChecked: idProduct }));
-                        message.success('Đặt hàng thành công');
-                        navigate('ordersuscess', {
-                            state: {
-                                payment: selectedPaymentDescription,
-                                totalprice: location.state.totalPrice,
-                            },
-                        });
+                        message.error('Sản phẩm trong kho đã hết! Vui lòng quay lại sau');
                     }
-                },
-                onError: (error) => {
-                    message.error(error?.response?.data?.message || 'Có lỗi xảy ra, vui lòng thử lại.');
-                },
-            },
-        );
+                } else {
+                    const orderId = response.data?.orderId;
+                    localStorage.setItem('orderId', orderId);
+                    dispatch(removeAllOrder({ listChecked: idProduct }));
+                    message.success('Đặt hàng thành công');
+                    navigate('ordersuccess', {
+                        state: {
+                            payment: selectedPaymentDescription,
+                            totalprice: location.state.totalPrice,
+                        },
+                    });
+                }
+            } catch (error) {
+                // Xử lý lỗi khi gọi API
+                message.error(error?.response?.data?.message || 'Có lỗi xảy ra, vui lòng thử lại.');
+            }
+        } else {
+            navigate('/profile_page');
+        }
     };
 
     const paymentMethods = [
@@ -121,6 +112,11 @@ function Payment() {
         { value: 'giaotietkiem', label: 'Giao tiết kiệm', icon: null, discount: '-16k' },
     ];
 
+    console.log(location.state?.cartItems);
+    const cartItems = location?.state?.cartItems;
+    console.log(cartItems);
+    console.log(location.state);
+
     return (
         <div>
             <PayPalScriptProvider options={initialOptions}>
@@ -130,107 +126,117 @@ function Payment() {
                             <div style={{ backgroundColor: '#fff', padding: '8px', marginBottom: '16px' }}>
                                 <div style={{ backgroundColor: '#fff', paddingTop: '8px' }}>
                                     <h2 style={{ marginLeft: '16px', marginBottom: '16px' }}>Giỏ hàng</h2>
-                                    {location.state.orderItems.map((orderItem, index) => (
-                                        <div key={index}>
-                                            <div className={styles.PaymentWrapper} key={orderItem.product}>
-                                                <div className={styles.test}>
-                                                    <img
-                                                        src="https://salt.tikicdn.com/ts/upload/ad/b7/93/7094a85d0b6d299f30ed89b03511deb9.png"
-                                                        width="24px"
-                                                        height="24px"
-                                                        alt=""
-                                                    />
-                                                    Gói: Giao siêu tốc 2h, trước 10h ngày mai
-                                                </div>
-                                                <div className={styles.PaymentWrapperLeft}>
-                                                    <div className={styles.wrapperItem}>
-                                                        <div
-                                                            style={{
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                            }}
-                                                        >
-                                                            <img src={now} alt="" width="32px" height="16px" />
-                                                            <span style={{ marginLeft: '8px' }}>Giao siêu tốc 2h</span>
-                                                        </div>
-                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                            <span
-                                                                style={{
-                                                                    textDecoration: 'line-through',
-                                                                    color: 'rgb(128, 128, 137)',
-                                                                    fontWeight: '500',
-                                                                }}
-                                                            >
-                                                                {convertPrice(25000)}
-                                                            </span>
-                                                            <span
-                                                                style={{
-                                                                    marginLeft: '8px',
-                                                                    color: 'rgb(0, 171, 86) ',
-                                                                    fontWeight: '500',
-                                                                }}
-                                                            >
-                                                                MIỄN PHÍ
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                        <div>
+                                    {cartItems?.length > 0 ? (
+                                        cartItems.map((cartItem, index) => {
+                                            return (
+                                                <div key={index}>
+                                                    <div className={styles.PaymentWrapper} key={cartItem.productId}>
+                                                        <div className={styles.test}>
                                                             <img
-                                                                src={orderItem.image}
-                                                                width="48px"
-                                                                height="48px"
+                                                                src="https://salt.tikicdn.com/ts/upload/ad/b7/93/7094a85d0b6d299f30ed89b03511deb9.png"
+                                                                width="24px"
+                                                                height="24px"
                                                                 alt=""
                                                             />
+                                                            Gói: Giao siêu tốc 2h, trước 10h ngày mai
                                                         </div>
-                                                        <div
-                                                            style={{
-                                                                marginLeft: '8px',
-                                                                color: 'rgb(128, 128, 137)',
-                                                                fontWeight: '450',
-                                                                fontSize: '1.5rem',
-                                                            }}
-                                                        >
-                                                            <span>{orderItem.name}</span>
-                                                            <div
-                                                                style={{
-                                                                    display: 'flex',
-                                                                    justifyContent: 'space-between',
-                                                                    marginTop: '10px',
-                                                                }}
-                                                            >
-                                                                <div>SL:X{orderItem.amount}</div>
-                                                                <span
+                                                        <div className={styles.PaymentWrapperLeft}>
+                                                            <div className={styles.wrapperItem}>
+                                                                <div
                                                                     style={{
-                                                                        color: 'red',
-                                                                        fontWeight: '500',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                    }}
+                                                                >
+                                                                    <img src={now} alt="" width="32px" height="16px" />
+                                                                    <span style={{ marginLeft: '8px' }}>
+                                                                        Giao siêu tốc 2h
+                                                                    </span>
+                                                                </div>
+                                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                    <span
+                                                                        style={{
+                                                                            textDecoration: 'line-through',
+                                                                            color: 'rgb(128, 128, 137)',
+                                                                            fontWeight: '500',
+                                                                        }}
+                                                                    >
+                                                                        {convertPrice(25000)}
+                                                                    </span>
+                                                                    <span
+                                                                        style={{
+                                                                            marginLeft: '8px',
+                                                                            color: 'rgb(0, 171, 86) ',
+                                                                            fontWeight: '500',
+                                                                        }}
+                                                                    >
+                                                                        MIỄN PHÍ
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                <div>
+                                                                    <img
+                                                                        src={cartItem.image}
+                                                                        width="48px"
+                                                                        height="48px"
+                                                                        alt=""
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    style={{
+                                                                        marginLeft: '8px',
+                                                                        color: 'rgb(128, 128, 137)',
+                                                                        fontWeight: '450',
                                                                         fontSize: '1.5rem',
                                                                     }}
                                                                 >
-                                                                    <span
+                                                                    <span>{cartItem.name}</span>
+                                                                    <div
                                                                         style={{
-                                                                            color: ' rgb(128, 128, 137)',
-                                                                            textDecoration: ' line-through',
-                                                                            marginRight: '8px',
+                                                                            display: 'flex',
+                                                                            justifyContent: 'space-between',
+                                                                            marginTop: '10px',
                                                                         }}
                                                                     >
-                                                                        {convertPrice(orderItem.price * 1.3)}
-                                                                    </span>
-                                                                    {convertPrice(orderItem.price)}
-                                                                </span>
+                                                                        <div>SL:X{cartItem.quantity}</div>
+                                                                        <span
+                                                                            style={{
+                                                                                color: 'red',
+                                                                                fontWeight: '500',
+                                                                                fontSize: '1.5rem',
+                                                                            }}
+                                                                        >
+                                                                            <span
+                                                                                style={{
+                                                                                    color: ' rgb(128, 128, 137)',
+                                                                                    textDecoration: ' line-through',
+                                                                                    marginRight: '8px',
+                                                                                }}
+                                                                            >
+                                                                                {convertPrice(cartItem.price * 1.3)}
+                                                                            </span>
+                                                                            {convertPrice(
+                                                                                cartItem.price * cartItem.quantity,
+                                                                            )}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
+                                                        </div>
+                                                        <div className={styles.PaymentWrapperRight}>
+                                                            <span>
+                                                                <Laixe></Laixe>
+                                                                Được giao bởi TikiNOW Smart Logistics (giao từ Hà Nội)
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className={styles.PaymentWrapperRight}>
-                                                    <span>
-                                                        <Laixe></Laixe>
-                                                        Được giao bởi TikiNOW Smart Logistics (giao từ Hà Nội)
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
+                                            );
+                                        })
+                                    ) : (
+                                        <p>Không có sản phẩm nào trong giỏ hàng.</p>
+                                    )}
 
                                     <p style={{ marginLeft: '16px', fontSize: '1.6rem', marginTop: '16px' }}>
                                         Chọn hình thức thanh toán
@@ -348,7 +354,7 @@ function Payment() {
                                 <div className={styles.wrapperRight}>
                                     <div className={styles.wrapperRightList}>
                                         <p style={{ color: 'rgb(128, 128, 137)', fontWeight: '500' }}>Tạm tính</p>
-                                        <span>{convertPrice(location.state.itemPrices)}</span>
+                                        <span>{convertPrice(location.state.totalPrice)}</span>
                                     </div>
                                     <div className={styles.wrapperRightList}>
                                         <p style={{ color: 'rgb(128, 128, 137)', fontWeight: '500' }}>

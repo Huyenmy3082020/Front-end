@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import styles from '../../components/NavbarComponent/NavbarComponet.module.scss';
 import * as CategorySevice from '../../service/CategoriService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function NavbarComponent(type, productType) {
     const [categories, setCategories] = useState([]);
 
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -18,11 +19,12 @@ function NavbarComponent(type, productType) {
 
         fetchCategories();
     }, []);
-    const navigate = useNavigate();
 
-    const handleGetTypeProduct = async (slug) => {
+    const id = useParams();
+    console.log('id', id);
+    const handleGetTypeProduct = async (id) => {
         try {
-            navigate(`/categories/${slug}`);
+            navigate(`/categories/${id}`);
         } catch (error) {}
     };
 
@@ -46,7 +48,7 @@ function NavbarComponent(type, productType) {
                             key={index}
                             className={styles.wrapperItem}
                             onClick={() => {
-                                handleGetTypeProduct(categorie.slug);
+                                handleGetTypeProduct(categorie._id);
                             }}
                         >
                             <a className={styles.wrapperItemLink}>

@@ -1,62 +1,145 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styles from '../../pages/OrderPage/OrderPage.module.scss';
-import { Col, Row, Checkbox } from 'antd';
+import { Col, Row, Checkbox, Empty } from 'antd';
 import topdeal from '../../assets/topdeal.png';
 import chinhhang from '../../assets/chinhhang.png';
 import doitrahang from '../../assets/doitra.png';
 import now from '../../assets/now.png';
-import carfreeship from '../../../src/assets/carfreeshsip.jpg';
+import * as ShipService from '../../service/ShipService';
 import { useDispatch, useSelector } from 'react-redux';
-import { decreaseOrder, increaseOrder, removeOrder, removeAllOrder } from '../../redux/slides/OrderSlide';
 import { convertPrice } from '../../ultil';
 import { message } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as Cartservice from '../../service/CartService';
 import FooterComponent from '../../components/FooterComponent/FooterComponent';
+import { clearCart, decreaseItem, increaseItem, removeItem, removeAllOrder } from '../../redux/slides/CartSlide';
 function OrderPage() {
+    const [isLoading, setIsLoading] = useState(true);
     const [listCheck, setlistChecked] = useState([]);
-    const orderItems = useSelector((state) => state.order.orderItems);
+    const [checkall, setCheckAll] = useState(false);
+    const [address, setAddress] = useState([]);
+    const location = useLocation();
+    const cartItems = useSelector((state) => state.cart.items);
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
     const [orders, setOrder] = useState([]);
+    const [carts, setCart] = useState([]);
     const dispatch = useDispatch();
 
+    const userId = user.id;
+
     useEffect(() => {
-        const featchOrderItems = async () => {
+        const fetchData = async () => {
             try {
-                const res = await Cartservice.getCartUser(user.id);
-                setOrder(res.data);
+                const response = await Cartservice.getAllProductByCart(user?.id);
+                const data = await response.json();
+                setCart(data);
             } catch (error) {
-                console.error(error);
+                console.error('Error fetching data:', error);
             }
         };
 
-        featchOrderItems();
-    }, [user.id]);
-    const userId = user.id;
+        fetchData();
+    }, []);
 
     const handleOnclickDecrease = async (productId, altam) => {
         try {
+            console.log(productId, altam);
             const data = { userId, productId, altam };
+
             await Cartservice.AlterAmount(data);
 
             const updatedCart = await Cartservice.getCartUser(userId);
             setOrder(updatedCart.data);
-            dispatch(decreaseOrder({ productId }));
+            dispatch(decreaseItem({ productId }));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    const handleOnclickIncrease = async (productId, altam) => {
+        try {
+            console.log(productId, altam);
+            const data = { userId, productId, altam };
+            await Cartservice.AlterAmount(data);
+            const updatedCart = await Cartservice.getCartUser(userId);
+            setOrder(updatedCart.data);
+            dispatch(increaseItem({ productId }));
         } catch (error) {
             console.error(error);
         }
     };
 
-    const handleOnclickIncrease = async (productId, altam) => {
+    const priceMemo = useMemo(() => {
+        const result = cartItems
+            ?.filter((item) => listCheck.includes(item.productId))
+            .reduce((total, cur) => {
+                return total + cur.price * cur.quantity;
+            }, 0);
+        return result;
+    }, [cartItems, listCheck]);
+
+    const priceDisCountMemo = useMemo(() => {
+        const result = cartItems
+            ?.filter((item) => listCheck.includes(item.productId))
+            .reduce((total, cur) => {
+                const discountAmount = (cur.price * cur.quantity * cur.discount) / 100;
+                return total + discountAmount;
+            }, 0);
+        return -result;
+    }, [cartItems, listCheck]);
+    const totalPriceMemo = useMemo(() => {
+        return Number(priceMemo) + Number(priceDisCountMemo);
+    }, [priceMemo, priceDisCountMemo]);
+    const cart = useSelector((state) => state.cart.cartId);
+
+    const handleDelete = async (productId) => {
+        const data = {
+            cart,
+            productId: productId,
+        };
+
         try {
-            const data = { userId, productId, altam };
-            await Cartservice.AlterAmount(data);
-            const updatedCart = await Cartservice.getCartUser(userId);
-            setOrder(updatedCart.data);
-            dispatch(increaseOrder({ productId }));
+            await Cartservice.deleteCartById(data);
+            dispatch(removeItem({ productId }));
         } catch (error) {
-            console.error(error);
+            console.error('Error deleting product from cart:', error.message);
+        }
+    };
+
+    const selectedOrderItems = cartItems?.filter((order) => listCheck?.includes(order.productId));
+
+    const handleOrder = () => {
+        if (selectedOrderItems.length === 0) {
+            message.error('Vui lòng chọn ít nhất một sản phẩm để thanh toán.');
+            return;
+        }
+
+        dispatch(removeAllOrder({ listChecked: listCheck }));
+        navigate('/payment', {
+            state: {
+                cartItems: selectedOrderItems,
+                priceMemo: priceMemo,
+                totalPrice: totalPriceMemo,
+                priceDisCountMemo: priceDisCountMemo,
+            },
+        });
+    };
+
+    const handleAll = async () => {
+        if (listCheck.length === 0) {
+            console.error('No products selected to delete.');
+            return;
+        }
+        const data = {
+            cart,
+            productIds: listCheck,
+        };
+
+        try {
+            await Cartservice.deleteCartById(data);
+            dispatch(removeAllOrder({ listChecked: listCheck }));
+        } catch (error) {
+            console.error('Error deleting selected products:', error.message);
         }
     };
 
@@ -70,74 +153,35 @@ function OrderPage() {
         }
     };
 
+    const allChecked = cartItems.every((item) => listCheck.includes(item.productId));
+
     const handleOnChangeAll = (e) => {
         if (e.target.checked) {
             const newCheck = [];
-            orders?.items?.forEach((item) => {
-                newCheck.push(item.product);
+            cartItems.forEach((item) => {
+                newCheck.push(item.productId);
             });
             setlistChecked(newCheck);
         } else {
             setlistChecked([]);
         }
     };
-    const priceMemo = useMemo(() => {
-        const result = orderItems
-            ?.filter((item) => listCheck.includes(item.product))
-            .reduce((total, cur) => {
-                return total + cur.price * cur.amount;
-            }, 0);
-        return result;
-    }, [orders?.items, listCheck]);
 
-    const priceDisCountMemo = useMemo(() => {
-        const result = orderItems
-            ?.filter((item) => listCheck.includes(item.product))
-            .reduce((total, cur) => {
-                const discountAmount = cur.price * cur.amount * (cur.discount / 100);
-                return total + discountAmount;
-            }, 0);
-        return -result;
-    }, [orders?.items, listCheck]);
+    const cartId = useSelector((state) => state.cart.cartId);
 
-    const totalPriceMemo = useMemo(() => {
-        return Number(priceMemo) + Number(priceDisCountMemo);
-    }, [priceMemo, priceDisCountMemo]);
-
-    const allChecked = orderItems.every((item) => listCheck.includes(item.product));
-
-    const orderID = orders?._id;
-    const handleDeleteById = async (idProduct) => {
-        const data = {
-            orderID,
-            idProduct,
+    useEffect(() => {
+        const fetchShippingData = async () => {
+            try {
+                const res = await Cartservice.getCartById(user?.id, cartId); // Truyền userId trực tiếp
+                setAddress(res); // Cập nhật dữ liệu shipping vào state
+            } catch (error) {
+                console.error(error);
+            }
         };
-        await Cartservice.deleteCartById(data);
-        dispatch(removeOrder({ idProduct }));
-    };
-    const handleDeleteAllProduct = () => {
-        dispatch(
-            removeAllOrder({
-                listChecked: listCheck,
-            }),
-        );
-    };
-    const selectedOrderItems = orderItems?.filter((order) => listCheck?.includes(order.product));
-    const handleOrder = () => {
-        if (selectedOrderItems.length === 0) {
-            message.error('Vui lòng chọn ít nhất một sản phẩm để thanh toán.');
-            return;
-        }
 
-        navigate('/payment', {
-            state: {
-                orderItems: selectedOrderItems,
-                itemPrices: priceMemo,
-                totalPrice: totalPriceMemo,
-                priceDisCountMemo: priceDisCountMemo,
-            },
-        });
-    };
+        fetchShippingData();
+    }, [cart, user?.id]); // Khi cart hoặc user.id thay đổi thì gọi lại
+
     return (
         <div>
             <div>
@@ -157,17 +201,17 @@ function OrderPage() {
                                     <img
                                         src="https://frontend.tikicdn.com/_desktop-next/static/img/icons/trash.svg"
                                         alt=""
-                                        onClick={handleDeleteAllProduct}
+                                        onClick={handleAll}
                                     />
                                 </div>
                             </div>
-                            {orderItems?.map((orderItem) => (
+                            {cartItems?.map((orderItem) => (
                                 <div className={styles.wrapperTitle} key={orderItem.product}>
                                     <div style={{ flex: '3', display: 'flex', alignItems: 'center' }}>
                                         <Checkbox
-                                            value={orderItem.product}
+                                            value={orderItem.productId}
                                             onChange={onChange}
-                                            checked={listCheck.includes(orderItem.product)}
+                                            checked={listCheck.includes(orderItem.productId)}
                                         ></Checkbox>
                                         <div style={{ display: 'flex', alignItems: 'center' }}>
                                             <div style={{ marginLeft: '6px' }}>
@@ -206,7 +250,7 @@ function OrderPage() {
                                         <div className={styles.quantity}>
                                             <span
                                                 className={styles.imgQuantityminus}
-                                                onClick={() => handleOnclickDecrease(orderItem.product, 'decreasa')}
+                                                onClick={() => handleOnclickDecrease(orderItem.productId, 'decrease')}
                                             >
                                                 <img
                                                     src="https://frontend.tikicdn.com/_desktop-next/static/img/icons/decrease.svg"
@@ -218,13 +262,13 @@ function OrderPage() {
                                             <input
                                                 type="text"
                                                 className={styles.inputQuantity}
-                                                value={orderItem.amount}
+                                                value={orderItem.quantity}
                                                 readOnly
                                             />
 
                                             <span
                                                 className={styles.imgQuantitySum}
-                                                onClick={() => handleOnclickIncrease(orderItem.product, 'increasa')}
+                                                onClick={() => handleOnclickIncrease(orderItem.productId, 'increase')}
                                             >
                                                 <img
                                                     src="https://frontend.tikicdn.com/_desktop-next/static/img/icons/increase.svg"
@@ -235,12 +279,12 @@ function OrderPage() {
                                         </div>
                                     </div>
                                     <div style={{ flex: '1', color: 'red', fontWeight: '500' }}>
-                                        {convertPrice(orderItem.price * orderItem.amount)}
+                                        {convertPrice(orderItem.price * orderItem.quantity)}
                                     </div>
                                     <div style={{ color: 'rgb(120, 120, 120)' }}>
                                         <img
                                             src="https://frontend.tikicdn.com/_desktop-next/static/img/icons/trash.svg"
-                                            onClick={() => handleDeleteById(orderItem.product)}
+                                            onClick={() => handleDelete(orderItem.productId)}
                                             alt=""
                                         />
                                     </div>
@@ -251,12 +295,15 @@ function OrderPage() {
                         <Col span={6}>
                             <div className={styles.wrapperRight}>
                                 <div className={styles.wrapperRightList}>
-                                    <span style={{ color: 'rgb(128, 128, 137)' }}>Giao tới</span>
-                                    <a href="profile_page">Thay đổi</a>
+                                    <span style={{ color: 'rgb(128, 128, 137)' }}>
+                                        Giao tới {address?.ward} {address?.district} {address?.city}
+                                    </span>
+
+                                    <a href="/ship">Thay đổi</a>
                                 </div>
                                 <div style={{ paddingTop: '8px' }}>
                                     <span>
-                                        {user?.name || 'Ha Tuan'} | {user?.phone || '01920390912'}
+                                        {address?.fullname} | {address?.phone}
                                     </span>
                                 </div>
                                 <div
@@ -273,9 +320,9 @@ function OrderPage() {
                                                 backgroundColor: 'rgb(239, 255, 244)',
                                             }}
                                         >
-                                            Nhà{' '}
+                                            Nhà {address?.address}
                                         </span>
-                                        {user?.address}
+                                        {}
                                     </span>
                                 </div>
                             </div>

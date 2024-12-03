@@ -3,3 +3,128 @@
     height: 1500px;
     padding-top: 20px;
 }
+.productList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.wrapperItem {
+    padding: 16px;
+    background-color: #fff;
+    margin: 8px;
+}
+.discoverCategory {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px 12px;
+}
+
+.subItemCategory {
+    display: flex;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    gap: 8px;
+}
+.subItemCategory a {
+    color: inherit !important;
+    text-decoration: none !important;
+    outline: none !important;
+    cursor: pointer !important;
+    color: rgb(39, 39, 42);
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 150%;
+    min-height: 42px;
+}
+.btnFilter {
+    background-color: rgb(10, 104, 255);
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 150%;
+    padding: 8px 16px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+.btnFilterActive {
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 150%;
+    padding: 8px 16px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+.filterWrapper {
+    display: flex;
+    gap: 8px;
+    text-align: center;
+    align-items: center;
+    background-color: #ddd;
+}
+.price {
+    background-color: #fff;
+}
+.wrapperPriceItem {
+    cursor: pointer;
+}
+.wrapperPrice {
+    gap: 8px;
+    background-color: #fff;
+    width: 160px;
+}
+
+.price {
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    background-color: #fff;
+    z-index: 9999;
+    width: 173px;
+}
+
+.wrapperPriceItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+}
+
+.wrapperPriceItem:hover {
+    background-color: #f0f0f0;
+}
+
+.priceOption {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 8px; /* Khoảng cách giữa text và icon */
+}
+
+.iconCheck {
+    font-size: 16px;
+    color: #1677ff;
+    visibility: hidden;
+}
+
+.wrapperPriceItem:hover .iconCheck {
+    visibility: visible;
+}
+
+.priceOption:active {
+    color: #1677ff;
+}

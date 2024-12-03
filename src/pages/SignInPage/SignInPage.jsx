@@ -35,6 +35,7 @@ function SignInPage() {
     const handleGetDetailUser = async (id, token) => {
         try {
             const res = await Userservice.getDetailUser(id, token);
+            
             dispatch(
                 updateUser({
                     ...res?.data,
@@ -55,7 +56,6 @@ function SignInPage() {
                 onSuccess: (data) => {
                     setIsLoading(false);
                     if (data?.accessToken) {
-                        console.log(data);
                         localStorage.setItem('access_token', data?.accessToken);
                         const decode = jwtDecode(data?.accessToken);
                         handleGetDetailUser(decode?.id, data?.accessToken);

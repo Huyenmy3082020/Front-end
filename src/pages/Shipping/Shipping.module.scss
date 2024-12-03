@@ -1,0 +1,64 @@
+.wrapper {
+    padding-top: 60px;
+    padding-left: 30px;
+    background-color: rgb(245, 245, 250);
+    height: 1000px;
+}
+.container {
+    position: relative;
+    flex: 1 0 40%;
+    background-color: rgb(255, 255, 255);
+    box-shadow: none;
+    border-radius: 3px;
+    border: 1px dashed rgb(0, 153, 0);
+    margin-bottom: 16px;
+    max-width: calc(50% - 20px);
+    padding: 10px 15px;
+}
+.btnCreateShipAddress {
+    cursor: pointer;
+    user-select: none;
+    padding: 6px 14px;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 2px;
+    outline-color: rgb(204, 204, 204);
+    background: linear-gradient(rgb(255, 255, 255), rgb(247, 247, 247));
+    height: 31px;
+    font-size: 12px;
+    margin-right: 7px;
+    border: 1px solid rgb(2, 159, 209);
+    color: rgb(255, 255, 255);
+    background: rgb(0, 182, 240);
+}
+.btnEnableShipAddress {
+    cursor: pointer;
+    user-select: none;
+    padding: 6px 14px;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 2px;
+    outline-color: rgb(204, 204, 204);
+    background: linear-gradient(rgb(255, 255, 255), rgb(247, 247, 247));
+    height: 31px;
+    font-size: 12px;
+    margin-right: 7px;
+    border: 1px solid rgb(2, 159, 209);
+    color: rgb(255, 255, 255);
+    background: #ddd;
+}
+.btnUpdateShipAddress {
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    padding: 6px 14px;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 2px;
+    outline-color: rgb(204, 204, 204);
+    background: linear-gradient(rgb(255, 255, 255), rgb(247, 247, 247));
+    height: 31px;
+    font-size: 12px;
+    border: 1px solid rgb(204, 204, 204);
+    margin-right: 7px;
+}

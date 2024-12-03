@@ -7,6 +7,7 @@ const axiosInstance = axios.create({
 
 export const createOrder = async (data) => {
     try {
+        console.log(data);
         const res = await axiosInstance.post(`/order/createOrder`, data);
         return res.data;
     } catch (error) {
@@ -24,7 +25,6 @@ export const getOrder = async () => {
         throw new Error('Failed to fetch orders');
     }
 };
-
 
 export const getOrderPaid = async () => {
     try {
@@ -45,3 +45,5 @@ export const deleteOrder = async (id) => {
         throw new Error('Failed to delete order');
     }
 };
+
+

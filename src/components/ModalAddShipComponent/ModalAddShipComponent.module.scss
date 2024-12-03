@@ -1,0 +1,62 @@
+.wrapper {
+    margin: 0px auto;
+    background: rgb(247, 247, 247);
+    border: 1px solid rgb(221, 221, 221);
+    box-shadow: none;
+    border-radius: 0px 0px 3px 3px;
+    margin: 0px auto;
+    padding: 10px 15px;
+    transition: max-height 0.5s ease-out;
+    max-height: 650px;
+    overflow: hidden;
+}
+.container {
+    background: rgb(247, 247, 247);
+    border: 1px solid rgb(221, 221, 221);
+    box-shadow: none;
+    border-radius: 0px 0px 3px 3px;
+    margin: 0px auto;
+    max-width: 550px;
+    padding: 10px 15px;
+    transition: max-height 0.5s ease-out;
+    max-height: 650px;
+    overflow: hidden;
+}
+.wrapperItem {
+    font-size: 13px;
+    margin: 0px 0px 15px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    flex-wrap: wrap;
+    color: rgb(51, 51, 51);
+}
+.wrapperItemInput {
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 4px;
+    height: 34px;
+    padding: 6px 12px;
+    width: 66.6666%;
+    line-height: 34px;
+    outline: none;
+}
+
+.wrapperItemInput:focus {
+    border-color: rgb(102, 175, 233);
+}
+
+.wrapperItem select {
+    height: 34px;
+    position: relative;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 345px;
+    line-height: 34px;
+}
+.wrapperItem label {
+    font-weight: 700;
+    width: 33.3333%;
+}

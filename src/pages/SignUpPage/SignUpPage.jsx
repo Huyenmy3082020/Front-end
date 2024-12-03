@@ -43,9 +43,11 @@ function SignUpPage() {
         mutation.mutate(
             { email, password, confirmPassword },
             {
+                
                 onSuccess: (data) => {
                     setIsLoading(false);
                     navigate('/sign-in');
+                    
                 },
                 onError: (error) => {
                     setIsLoading(false);

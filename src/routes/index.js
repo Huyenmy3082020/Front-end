@@ -12,6 +12,7 @@ import OrderSusscess from '../pages/OrderSuscces/OrderSusscess';
 import Payment from '../pages/Payment/Payment';
 import CategoryProduct from '../pages/CategoryProduct/CategoryProduct';
 import Myorder from '../pages/Myorder/Myorder';
+import Shipping from '../pages/Shipping/ShippingPage';
 const routes = [
     {
         path: '/',
@@ -88,8 +89,15 @@ const routes = [
         isShowFooter: true,
     },
     {
-        path: 'categories/:slug',
+        path: 'categories/:id',
         page: CategoryProduct,
+        isPrivate: true,
+        isShowHeader: true,
+        isShowFooter: true,
+    },
+    {
+        path: 'Ship',
+        page: Shipping,
         isPrivate: true,
         isShowHeader: true,
         isShowFooter: true,

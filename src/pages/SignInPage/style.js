@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 export const WrapperContainerLeft = styled.div`
     width: 500px;
-    padding: 40px 45px 24px;
+    padding: 2px 45px 24px;
     background: rgb(255, 255, 255);
     border-radius: 20px 0px 0px 20px;
 `;

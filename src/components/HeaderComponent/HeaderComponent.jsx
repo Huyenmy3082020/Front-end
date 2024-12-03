@@ -28,8 +28,8 @@ import Tippy from '@tippyjs/react/headless';
 import SearchComponent from './SearchComponent/Search';
 function HeaderComponent() {
     const user = useSelector((state) => state.user);
+    const cartItems = useSelector((state) => state.cart.orderItems);
 
-    const order = useSelector((state) => state.order.orderItems);
     const navigate = useNavigate();
     const hanldenavigateOrder = () => {
         navigate('/order');
@@ -175,7 +175,7 @@ function HeaderComponent() {
                             </WrapperListAccount>
                             <div>
                                 <div style={{ marginLeft: '16px' }}>
-                                    <Badge count={order.length > 0 ? order.length : 0} size="small">
+                                    <Badge count={cartItems.length > 0 ? cartItems.length : 0} size="small">
                                         <ShoppingCartOutlined
                                             onClick={hanldenavigateOrder}
                                             style={{ fontSize: '24px', color: '#1677ff', cursor: 'pointer' }}

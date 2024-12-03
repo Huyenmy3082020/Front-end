@@ -11,8 +11,7 @@ function AllOrder() {
         const fetchOrders = async () => {
             try {
                 const result = await OrderService.getOrder();
-
-                setAllOrder(result.data); // Dữ liệu trả về từ API có thể được truy cập qua result.data
+                setAllOrder(result.data);
             } catch (error) {
                 console.error('Failed to fetch orders:', error);
             }
@@ -21,6 +20,7 @@ function AllOrder() {
         fetchOrders();
     }, []);
 
+    console.log(allOrder);
     const handleCancleOrder = async (orderId) => {
         try {
             await OrderService.deleteOrder(orderId);

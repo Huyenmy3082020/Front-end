@@ -5,7 +5,6 @@ import * as UserService from '../../service/Userservice';
 import { useMutationHooks } from '../../hooks/useMutationHook';
 import { Button, Col, Radio, Row, Select, Input, message } from 'antd';
 import NavbarProfile from '../../components/NavbarProfile/NavbarProfile.jsx';
-import { toast } from 'react-toastify';
 function ProfilePage() {
     const user = useSelector((state) => state.user);
     const [email, setEmail] = useState('');
@@ -13,7 +12,7 @@ function ProfilePage() {
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [avatar, setAvatar] = useState('');
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState(user.date);
 
     const handleOnChangeName = (value) => {
         setName(value);

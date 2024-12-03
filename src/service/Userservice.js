@@ -2,20 +2,20 @@ import axios from 'axios';
 
 export const axiosJWT = axios.create();
 export const loginUser = async (data) => {
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/user/sign-in`, data, {
-        withCredentials: true, // Thêm dòng này để gửi cookie
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}user/sign-in`, data, {
+        withCredentials: true,
     });
     return res.data;
 };
 
 export const signUpUser = async (data) => {
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/user/sign-up`, data);
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}user/sign-up`, data);
     return res.data;
 };
 
 export const getDetailUser = async (id, access_token) => {
     try {
-        const res = await axiosJWT.get(`${process.env.REACT_APP_API_URL}/api/user/getUser/${id}`, {
+        const res = await axiosJWT.get(`${process.env.REACT_APP_API_URL}user/getUser/${id}`, {
             headers: {
                 Authorization: `Bearer ${access_token}`,
             },
@@ -29,7 +29,7 @@ export const getDetailUser = async (id, access_token) => {
 export const refreshToken = async () => {
     try {
         const res = await axios.post(
-            `${process.env.REACT_APP_API_URL}/api/user/refreshtoken`,
+            `${process.env.REACT_APP_API_URL}user/refreshtoken`,
             {},
             { withCredentials: true },
         );
@@ -42,7 +42,7 @@ export const refreshToken = async () => {
 
 export const UpdateUser = async (id, data, access_token) => {
     try {
-        const res = await axiosJWT.put(`${process.env.REACT_APP_API_URL}/api/user/update-user/${id}`, data, {
+        const res = await axiosJWT.put(`${process.env.REACT_APP_API_URL}user/update-user/${id}`, data, {
             headers: {
                 authorization: `Bearer ${access_token}`,
             },
@@ -54,7 +54,7 @@ export const UpdateUser = async (id, data, access_token) => {
     }
 };
 export const logoutUser = async () => {
-    const res = await axios.post('http://localhost:2000/api/user/logout', {}, { withCredentials: true });
+    const res = await axios.post('http://localhost:2000//user/logout', {}, { withCredentials: true });
 
     return res.data;
 };

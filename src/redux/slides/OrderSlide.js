@@ -18,20 +18,16 @@ export const OrderSlide = createSlice({
     name: 'order',
     initialState,
     reducers: {
-        addOrder: (state, action) => {
-            const { orderItem } = action.payload;
-            const itemOrder = state?.orderItems?.find((item) => item.product === orderItem.product);
-
-            if (itemOrder) {
-                itemOrder.amount += orderItem.amount;
-            } else {
-                state.orderItems.push(orderItem);
-            }
+        addItem: (state, action) => {
+            const newOrder = action.payload; // result.data từ API
+            state.items = [...state.items, ...newOrder.items]; // Gộp các sản phẩm vào giỏ hàng
+            state.totalPrice = newOrder.totalPrice || 0; // Tổng giá trị nếu có trả về từ API
+            state.orderId = newOrder.orderId || null; // Lưu Order ID nếu có
         },
 
         removeOrder: (state, action) => {
-            const { idProduct } = action.payload;
-            state.orderItems = state.orderItems.filter((item) => item.product !== idProduct);
+            const { productId } = action.payload;
+            state.orderItems = state.orderItems.filter((item) => item.productId !== productId);
         },
 
         removeAllOrder: (state, action) => {
